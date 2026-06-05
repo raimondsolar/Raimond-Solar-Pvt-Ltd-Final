@@ -1,0 +1,6 @@
+{
+  "name": "Raimond Solar Pvt Ltd",
+  "description": "PM Surya Ghar Solar Subsidy rooftop solar installations in West Bengal. Calculate savings, check subsidies, view pricing packages, and interact with Ask Raimond AI solar assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
