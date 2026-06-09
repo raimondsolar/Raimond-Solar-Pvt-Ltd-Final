@@ -22,7 +22,8 @@ import {
   Award,
   Bot,
   User,
-  CheckCheck
+  CheckCheck,
+  Menu
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { trackEvent, initTracking } from "@/lib/tracking";
@@ -54,9 +55,9 @@ const SOLAR_PACKAGES: SolarPackage[] = [
   {
     id: "pkg-1kw",
     size: "1kWp Package",
-    grossPrice: "₹92,222",
+    grossPrice: "₹92,000",
     subsidy: "₹30,000",
-    netPrice: "₹62,222",
+    netPrice: "₹62,000",
     dailyGen: "4.6 Units",
     monthlyGen: "138 Units",
     monthlySavings: "₹966",
@@ -67,9 +68,9 @@ const SOLAR_PACKAGES: SolarPackage[] = [
   {
     id: "pkg-2kw",
     size: "2kWp Package",
-    grossPrice: "₹1,44,444",
+    grossPrice: "₹1,44,000",
     subsidy: "₹60,000",
-    netPrice: "₹84,444",
+    netPrice: "₹84,000",
     dailyGen: "9.2 Units",
     monthlyGen: "276 Units",
     monthlySavings: "₹1,932",
@@ -80,9 +81,9 @@ const SOLAR_PACKAGES: SolarPackage[] = [
   {
     id: "pkg-3kw",
     size: "3kWp Package",
-    grossPrice: "₹1,98,889",
+    grossPrice: "₹1,98,000",
     subsidy: "₹78,000",
-    netPrice: "₹1,20,889",
+    netPrice: "₹1,20,000",
     dailyGen: "13.8 Units",
     monthlyGen: "414 Units",
     monthlySavings: "₹2,898",
@@ -94,9 +95,9 @@ const SOLAR_PACKAGES: SolarPackage[] = [
   {
     id: "pkg-4kw",
     size: "4kWp Package",
-    grossPrice: "₹2,66,667",
+    grossPrice: "₹2,66,000",
     subsidy: "₹78,000",
-    netPrice: "₹1,88,667",
+    netPrice: "₹1,88,000",
     dailyGen: "18.4 Units",
     monthlyGen: "552 Units",
     monthlySavings: "₹3,864",
@@ -107,9 +108,9 @@ const SOLAR_PACKAGES: SolarPackage[] = [
   {
     id: "pkg-5kw",
     size: "5kWp Package",
-    grossPrice: "₹3,13,333",
+    grossPrice: "₹3,13,000",
     subsidy: "₹78,000",
-    netPrice: "₹2,35,333",
+    netPrice: "₹2,35,000",
     dailyGen: "23 Units",
     monthlyGen: "690 Units",
     monthlySavings: "₹4,830",
@@ -172,7 +173,7 @@ export default function RaimondSolarLandingPage() {
   const [calcBill, setCalcBill] = useState<number>(2400); // Monthly bill input
 
   const calculatedSubsidy = calcSelectedSize === 1 ? 30000 : calcSelectedSize === 2 ? 60000 : 78000;
-  const calcBaseRates: Record<number, number> = { 1: 92222, 2: 144444, 3: 198889, 4: 266667, 5: 313333 };
+  const calcBaseRates: Record<number, number> = { 1: 92000, 2: 144000, 3: 198000, 4: 266000, 5: 313000 };
   const calculatedGross = calcBaseRates[calcSelectedSize] || calcSelectedSize * 65000;
   const calculatedNet = Math.max(0, calculatedGross - calculatedSubsidy);
   const calculatedMonthlyUnits = calcSelectedSize * 138;
@@ -192,6 +193,8 @@ export default function RaimondSolarLandingPage() {
   const [isAILoading, setIsAILoading] = useState(false);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // FAQ accordion active key list
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
@@ -202,11 +205,33 @@ export default function RaimondSolarLandingPage() {
 
   // Scroll to a division smoothly
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      trackEvent("Button Click", { action: `Scrolled to Section: ${id}` });
-    }
+    // Map older section IDs to new streamlined IDs
+    let targetId = id;
+    if (id === "hero-section") targetId = "home";
+    if (id === "pricing-section") targetId = "price";
+    if (id === "calculator-section") targetId = "subsidy-calculator";
+    if (id === "why-choose-section") targetId = "on-grid";
+    if (id === "video-gallery-section") targetId = "video";
+    if (id === "faq-section") targetId = "faq";
+
+    // Close mobile menu if open immediately
+    setIsMobileMenuOpen(false);
+
+    // Let any mobile toggle keyboard / transitions settle
+    setTimeout(() => {
+      const el = document.getElementById(targetId);
+      if (el) {
+        const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+        // Subtract 75px representing the sticky navigation header height
+        const offsetPosition = elementPosition - 75;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+        trackEvent("Button Click", { action: `Scrolled to Section: ${targetId}` });
+      }
+    }, 120);
   };
 
   // Lead Form submission handler (Integrating Apps Script Web App submission logic)
@@ -405,7 +430,7 @@ export default function RaimondSolarLandingPage() {
   // Handle calculator package selection click
   const handleClaimCalculatorPkg = (size: number) => {
     setPreferredSystem(`${size}kWp`);
-    scrollToSection("hero-section");
+    scrollToSection("home");
     trackEvent("Button Click", { action: `Claim Pricing from Calculator: ${size}kW` });
   };
 
@@ -420,9 +445,9 @@ export default function RaimondSolarLandingPage() {
       </div>
 
       {/* Modern Floating Header Bar */}
-      <nav className="sticky top-0 z-40 py-3 px-3 sm:px-8 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4">
-          <div className="flex flex-col">
+      <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md">
+        <div className="max-w-7xl mx-auto py-3 px-3 sm:px-8 flex items-center justify-between gap-1.5 sm:gap-4">
+          <div className="flex flex-col shrink-0">
             <span className="text-lg sm:text-2xl font-black tracking-tight text-slate-950 font-display">
               RAIMOND <span className="text-amber-500">SOLAR</span>
             </span>
@@ -431,20 +456,53 @@ export default function RaimondSolarLandingPage() {
             </span>
           </div>
 
-          {/* Quick Contact Desk */}
-          <div className="hidden lg:flex items-center gap-6">
-            <a
-              href="mailto:raimondsolar83@gmail.com"
-              className="text-slate-600 hover:text-amber-600 transition-colors text-xs font-semibold"
+          {/* Desktop Navigation Links */}
+          <div className="hidden xl:flex items-center gap-4 text-xs font-black tracking-tight text-slate-700 uppercase font-display">
+            <button
+              onClick={() => scrollToSection("home")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer"
             >
-              raimondsolar83@gmail.com
-            </a>
-            <div className="text-[11px] text-sky-700 bg-sky-50 border border-sky-100 rounded-full px-3 py-1 flex items-center gap-1.5 font-bold">
-              <ShieldCheck className="w-3.5 h-3.5 text-sky-600" /> WBSEDCL Registered Vendor
-            </div>
+              Home
+            </button>
+            <button
+              onClick={() => scrollToSection("on-grid")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer"
+            >
+              Solar On-Grid System
+            </button>
+            <button
+              onClick={() => scrollToSection("price")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer"
+            >
+              Price
+            </button>
+            <button
+              onClick={() => scrollToSection("packages")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer"
+            >
+              Package Options
+            </button>
+            <button
+              onClick={() => scrollToSection("subsidy-calculator")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer inline-block whitespace-nowrap"
+            >
+              Smart Subsidy Calculator
+            </button>
+            <button
+              onClick={() => scrollToSection("video")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer inline-block whitespace-nowrap"
+            >
+              Raimond Solar Video
+            </button>
+            <button
+              onClick={() => scrollToSection("faq")}
+              className="hover:text-amber-500 hover:scale-105 transition-all cursor-pointer"
+            >
+              FAQ
+            </button>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             {/* RED DUAL-DESKTOP/MOBILE CT CUSTOM CALL BUTTON */}
             <a
               href="tel:9073059780"
@@ -455,23 +513,102 @@ export default function RaimondSolarLandingPage() {
             >
               <Phone className="w-3.5 h-3.5 fill-current shrink-0" /> <span className="hidden xs:inline">Call:</span> 9073059780
             </a>
+
+            {/* Mobile / Tablet Hamburger Toggle Button */}
             <button
-              onClick={() => {
-                scrollToSection("pricing-section");
-                trackEvent("Button Click", { action: "Header Package Prices Click" });
-              }}
-              className="px-4 py-2.5 text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-110 active:scale-95 hover:shadow-emerald-500/20 hidden sm:block border-0 cursor-pointer"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="xl:hidden p-2 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200"
+              aria-label="Toggle Menu"
             >
-              Package Prices
+              <Menu className="w-5 h-5" />
             </button>
           </div>
         </div>
+
+        {/* Mobile menu drop-down with slick animations */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="xl:hidden border-t border-slate-200/80 bg-white shadow-inner overflow-hidden text-left"
+            >
+              <div className="px-4 py-4 space-y-3.5 flex flex-col font-display font-black text-sm uppercase tracking-wider text-slate-800">
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("home");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("on-grid");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  Solar On-Grid System
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("price");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  Price
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("packages");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  Package Options
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("subsidy-calculator");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  Smart Subsidy Calculator
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("video");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  Raimond Solar Video
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToSection("faq");
+                  }}
+                  className="w-full text-left py-2 hover:text-amber-500 transition-all hover:pl-2 bg-transparent border-0 cursor-pointer"
+                >
+                  FAQ
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO SECTION with High-Quality Solar Panel Background Roof Image */}
       <section 
         className="relative overflow-hidden py-10 md:py-20 px-4 sm:px-8 bg-cover bg-center bg-no-repeat" 
-        id="hero-section"
+        id="home"
         style={{ 
           backgroundImage: `url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=1920')`
         }}
@@ -629,7 +766,7 @@ export default function RaimondSolarLandingPage() {
             {/* Hero Interactive CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <button
-                onClick={() => scrollToSection("pricing-section")}
+                onClick={() => scrollToSection("price")}
                 className="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-center rounded-2xl transition-all shadow-[0_5px_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 hover:scale-108 hover:shadow-emerald-500/40 active:scale-95 duration-200 cursor-pointer"
               >
                 View Package Prices (প্যাকেজ মূল্য) <ArrowRight className="w-4 h-4" />
@@ -964,7 +1101,7 @@ export default function RaimondSolarLandingPage() {
       </section>
 
       {/* PACKAGE PRICING SECTION - Set with professional white gradients & materials */}
-      <section className="py-16 md:py-24 px-4 sm:px-8 bg-gradient-to-b from-white via-slate-50 to-white" id="pricing-section">
+      <section className="py-16 md:py-24 px-4 sm:px-8 bg-gradient-to-b from-white via-slate-50 to-white" id="price">
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -1025,7 +1162,7 @@ export default function RaimondSolarLandingPage() {
           </div>
 
           {/* Package Grid layout with white gradients and crisp borders */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div id="packages" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {SOLAR_PACKAGES.map((pkg) => {
               const isHighlyRecommended = pkg.id === "pkg-3kw";
               return (
@@ -1125,7 +1262,7 @@ export default function RaimondSolarLandingPage() {
       </section>
 
       {/* SOLAR SAVINGS ROI CALCULATOR - Rendered on white gradient blocks */}
-      <section className="py-16 md:py-24 px-4 sm:px-8 bg-gradient-to-b from-white to-slate-100 border-t border-slate-200/85" id="calculator-section">
+      <section className="py-16 md:py-24 px-4 sm:px-8 bg-gradient-to-b from-white to-slate-100 border-t border-slate-200/85" id="subsidy-calculator">
         <div className="max-w-5xl mx-auto">
           
           <div className="text-center mb-12">
@@ -1271,7 +1408,7 @@ export default function RaimondSolarLandingPage() {
       </section>
 
       {/* WHY TRUST US SECTION */}
-      <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="why-choose-section">
+      <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="on-grid">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
             West Bengal Solar Authority
@@ -1365,7 +1502,7 @@ export default function RaimondSolarLandingPage() {
       </section>
 
       {/* VIDEO GALLERY SECTION */}
-      <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="video-gallery-section">
+      <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="video">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
             Project Visual Proofs
@@ -1412,7 +1549,7 @@ export default function RaimondSolarLandingPage() {
       </section>
 
       {/* DETAILED ACCORDION FAQ */}
-      <section className="py-16 md:py-24 px-4 sm:px-8 max-w-4xl mx-auto" id="faq-section">
+      <section className="py-16 md:py-24 px-4 sm:px-8 max-w-4xl mx-auto" id="faq">
         <div className="text-center mb-12">
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
             Solar Information Base
@@ -1513,7 +1650,7 @@ export default function RaimondSolarLandingPage() {
             </a>
             <button
               onClick={() => {
-                scrollToSection("hero-section");
+                scrollToSection("home");
                 trackEvent("Button Click", { action: "Footer Section Booking CTA Click" });
               }}
               className="px-8 py-4.5 bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-500 hover:from-amber-400 hover:via-emerald-400 hover:to-teal-400 text-slate-950 font-black text-base rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(245,158,11,0.35)] hover:shadow-[0_15px_40px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 hover:scale-[1.15] hover:-translate-y-1 active:scale-90 duration-300 cursor-pointer outline-none border-none select-none group focus:ring-2 focus:ring-emerald-400"
@@ -1567,7 +1704,7 @@ export default function RaimondSolarLandingPage() {
         </a>
 
         <button
-          onClick={() => scrollToSection("hero-section")}
+          onClick={() => scrollToSection("home")}
           id="sticky-mobile-quote"
           className="flex flex-col items-center justify-center py-2 px-1 bg-amber-500 rounded-xl text-slate-950 font-black transition-all hover:bg-amber-400"
         >

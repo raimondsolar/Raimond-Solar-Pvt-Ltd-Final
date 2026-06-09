@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google"; 
-import Script from 'next/script';
-import "./globals.css"; 
+import { Inter, Space_Grotesk } from "next/font/google";
+import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // আপনার দেওয়া সম্পূর্ণ জিও-লোকেশন ও কোম্পানির তথ্যসহ রেডি স্কিমা মার্কআপ
+  // Rich Structured Schema definitions (LocalBusiness and Organization)
   const schemaMarkup = {
     "@context": "https://schema.org",
     "@graph": [
@@ -69,38 +68,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
-        {/* Schema Markup */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
         />
-
-        {/* Google Tag Manager - 1st Code (Head) - Next.js সঠিক ফরম্যাট */}
-        <Script
-          id="gtm-script"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-5SMVTHW4');
-            `,
-          }}
-        />
       </head>
       <body className="font-sans antialiased bg-slate-950 text-slate-100" suppressHydrationWarning>
-        {/* Google Tag Manager (noscript) - 2nd Code (Body) - Next.js সঠিক ফরম্যাট */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-5SMVTHW4"
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-
         {children}
       </body>
     </html>
