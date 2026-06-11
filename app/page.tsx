@@ -229,6 +229,7 @@ export default function RaimondSolarLandingPage() {
           top: offsetPosition,
           behavior: "smooth"
         });
+        history.pushState(null, "", `#${targetId}`);
         trackEvent("Button Click", { action: `Scrolled to Section: ${targetId}` });
       }
     }, 120);
