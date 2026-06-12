@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleTagManager } from '@next/third-parties/google';
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-sans antialiased bg-slate-950 text-slate-100" suppressHydrationWarning>
         {children}
+        <GoogleTagManager gtmId="GTM-5SMVTHW4" />
       </body>
     </html>
   );
