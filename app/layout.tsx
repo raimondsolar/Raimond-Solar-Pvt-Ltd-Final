@@ -73,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
         />
       </head>
-      <body className="font-sans antialiased bg-slate-950 text-slate-100" suppressHydrationWarning>
+      <body className="font-sans antialiased bg-slate-950 text-slate-100 w-full max-w-full overflow-x-hidden" suppressHydrationWarning>
         {children}
       </body>
     </html>

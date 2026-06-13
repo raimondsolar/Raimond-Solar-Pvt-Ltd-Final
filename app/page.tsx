@@ -442,7 +442,7 @@ export default function RaimondSolarLandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-amber-100 p-0 m-0 font-sans">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-amber-100 p-0 m-0 font-sans">
 
       {/* Google Tag Manager (Script) */}
       <Script id="gtm-script" strategy="afterInteractive">
@@ -466,21 +466,21 @@ export default function RaimondSolarLandingPage() {
       </noscript>
 
       {/* Top Banner indicating Government Scheme validation */}
-      <div className="bg-amber-500 text-slate-950 font-black text-center py-3.5 px-4 sm:py-5 sm:px-6 z-50 flex flex-col items-center justify-center gap-1.5 sm:gap-2 font-display relative shadow-sm leading-normal">
-        <div className="flex items-center justify-center gap-2 sm:gap-2.5 flex-wrap">
+      <div className="bg-amber-500 text-slate-950 font-black text-center py-4 px-4 sm:py-5 sm:px-6 z-50 flex flex-col items-center justify-center gap-2 sm:gap-3 font-display relative shadow-md leading-normal w-full max-w-full overflow-hidden">
+        <div className="flex items-center justify-center gap-2 sm:gap-2.5 flex-wrap w-full max-w-full">
           <Sun className="w-4.5 h-4.5 sm:w-5 sm:h-5 fill-slate-950 animate-pulse shrink-0" /> 
-          <span className="text-xs xs:text-sm sm:text-base md:text-lg tracking-wide uppercase font-extrabold text-slate-950">RAIMOND SOLAR PVT LTD - AUTHORIZED SOLAR VENDOR & INTEGRATOR</span>
+          <span className="text-sm xs:text-base sm:text-lg md:text-xl font-extrabold tracking-wide uppercase text-slate-950 break-words text-center w-full max-w-full">RAIMOND SOLAR PVT LTD - AUTHORIZED SOLAR VENDOR & INTEGRATOR</span>
         </div>
-        <div className="text-[11px] xs:text-xs sm:text-sm md:text-base text-slate-900 font-bold opacity-95 max-w-4xl mx-auto leading-relaxed">
+        <div className="text-sm md:text-base text-slate-900 font-bold max-w-4xl mx-auto leading-relaxed break-words w-full">
           We assist in PM Surya Ghar National Portal Subsidy applications as a registered vendor. Raimond Solar is an Empaneled Vendor under National Portal for WBSEDCL & CESC consumers.
         </div>
       </div>
 
       {/* Modern Floating Header Bar */}
       <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md relative">
-        <div className="max-w-7xl mx-auto py-3 px-2 sm:px-8 flex items-center justify-between gap-1 sm:gap-4">
+        <div className="max-w-7xl mx-auto py-3 px-2 sm:px-4 flex flex-row items-center justify-between w-full gap-1 sm:gap-4">
           <Link href="/" className="shrink-0">
-            <span className="text-lg sm:text-xl md:text-2xl font-black tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display">
+            <span className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold tracking-tight sm:tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display whitespace-nowrap">
               RAIMOND SOLAR PVT LTD
             </span>
           </Link>
@@ -531,29 +531,29 @@ export default function RaimondSolarLandingPage() {
             </button>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
+          <div className="flex flex-row items-center gap-1 sm:gap-2.5 shrink-0">
             {/* RED DUAL-DESKTOP/MOBILE CT CUSTOM CALL BUTTON */}
             <a
               href="tel:9073059780"
               onClick={() => trackEvent("Phone Click", { location: "Nav Red Call Now Button" })}
               id="gtm-call-btn"
-              className="gtm-call-click px-4 sm:px-5 py-2.5 sm:py-3 text-base md:text-lg font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 animate-pulse font-display"
+              className="gtm-call-click py-2 px-3 sm:py-2.5 sm:px-4 text-xs sm:text-base md:text-lg font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center justify-center gap-1 sm:gap-2 shrink-0 animate-pulse font-display"
               style={{ animationDuration: '3s' }}
             >
-              <Phone className="w-4 sm:w-5 h-4 sm:h-5 fill-current shrink-0 text-white" />
+              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-5 fill-current shrink-0 text-white" />
               <span className="font-mono tracking-tight font-black text-white">9073059780</span>
             </a>
 
             {/* Mobile / Tablet Hamburger Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="xl:hidden w-11 h-11 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border-2 border-slate-200 shrink-0 flex items-center justify-center"
+              className="xl:hidden w-10 h-10 sm:w-11 sm:h-11 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border-2 border-slate-200/80 shrink-0 flex items-center justify-center p-0 m-0"
               aria-label="Toggle Menu"
             >
               {isMobileMenuOpen ? (
-                <X className="w-5 h-5 sm:w-6 sm:h-6 text-rose-600" strokeWidth={3} />
+                <X className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" strokeWidth={3} />
               ) : (
-                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" strokeWidth={3} />
+                <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-slate-800" strokeWidth={3} />
               )}
             </button>
           </div>
@@ -758,23 +758,23 @@ export default function RaimondSolarLandingPage() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10 w-full max-w-full overflow-hidden">
           
           {/* Main Hero Header Highlights */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-6 text-left w-full max-w-full overflow-hidden">
  
             {/* Bengali/English Hybrid Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight font-display animate-fade-in text-center lg:text-left space-y-1.5 lg:space-y-0">
-              <span className="block lg:inline">সরকারি ভর্তুকির সুবিধায়</span>{" "}
-              <span className="block lg:inline font-black text-amber-500">নিজের বাড়িতে সোলার বসান ও</span>{" "}
-              <span className="block lg:inline">
-                <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4 inline-block lg:inline">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight font-display animate-fade-in text-center lg:text-left break-words w-full max-w-full whitespace-normal">
+              <span className="block md:inline">সরকারি ভর্তুকির সুবিধায়</span>{" "}
+              <span className="block md:inline">নিজের বাড়িতে সোলার বসান ও</span>{" "}
+              <span className="block md:inline">
+                <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন
               </span>
             </h1>
  
             {/* Subheadline Details */}
-            <p className="text-slate-100 text-lg sm:text-xl lg:text-2xl max-w-2xl leading-relaxed drop-shadow-sm font-bold text-center lg:text-left mt-4">
-              পশ্চিমবঙ্গের সর্বাধিক নির্ভরযোগ্য সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/50 px-2 py-1 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
+            <p className="text-slate-100 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed drop-shadow-sm font-bold text-center lg:text-left mt-5 mb-5 md:mt-6">
+              পশ্চিমবঙ্গের সর্বাধিক নির্ভরযোগ্য সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/40 px-1 py-0.5 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
             </p>
  
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl mx-auto lg:mx-0 text-left">
