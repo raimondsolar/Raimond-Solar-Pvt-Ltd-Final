@@ -129,7 +129,7 @@ export default function ThankYouPage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-900/80 bg-slate-950/80 py-4 text-center text-xs text-slate-500 font-sans">
-        RAIMOND SOLAR PVT LTD • Sonarpur, Kolkata - 700150 • ISO Certified & MNRE Approved
+        RAIMOND SOLAR PVT LTD • Sonarpur, Kolkata - 700150 • ISO Certified Co.
       </footer>
     </div>
   );

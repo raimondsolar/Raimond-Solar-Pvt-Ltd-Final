@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Script from "next/script";
 import {
   Phone,
   MessageSquare,
@@ -198,6 +200,10 @@ export default function RaimondSolarLandingPage() {
   // FAQ accordion active key list
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
+  // Modals for Privacy Policy & Terms of Service
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+
   // Init standard pixel tracker
   useEffect(() => {
     initTracking();
@@ -349,7 +355,7 @@ export default function RaimondSolarLandingPage() {
       }
 
       if (norm.includes("phone") || norm.includes("call") || norm.includes("যোগাযোগ") || norm.includes("নম্বর") || norm.includes("ফোন") || norm.includes("contact") || norm.includes("whatsapp") || norm.includes("হোয়াটসঅ্যাপ") || norm.includes("কথা")) {
-        return `আপনি আমাদের সাথে সরাসরি কথা বলতে পারেন বা হোয়াটসঅ্যাপে মেসেজ পাঠাতে পারেন:\n📞 **৯০৭৩০৫৯৭৮০** (প্রধান হেল্পলাইন)\n📞 **৬২৮৯৬৩৮৬৪৯** (বিকল্প হেল্পলাইন)\n📧 ইমেইল: raimondsolar83@gmail.com\n\nআমাদের একজন প্রতিনিধি ২৪ ঘণ্টার মধ্যে যোগাযোগ করবেন। আপনার ফোন নম্বর ও জেলা আমাদের মেসেজ করলেই সোলার সার্ভেয়ার সরাসরি যোগাযোগ করে নেবেন।`;
+        return `আপনি আমাদের সাথে সরাসরি কথা বলতে পারেন বা হোয়াটসঅ্যাপে মেসেজ পাঠাতে পারেন:\n📞 **৯০৭৩০৫৯৭৮০** (প্রধান হেল্পলাইন)\n📞 **৬২৮৯৬৩৮৬৪৯** (বিকল্প হেল্পলাইন)\n📧 ইমেইল: info@raimondsolar.in\n\nআমাদের একজন প্রতিনিধি ২৪ ঘণ্টার মধ্যে যোগাযোগ করবেন। আপনার ফোন নম্বর ও জেলা আমাদের মেসেজ করলেই সোলার সার্ভেয়ার সরাসরি যোগাযোগ করে নেবেন।`;
       }
 
       return `নমস্কার! বর্তমানে অতিরিক্ত ট্রাফিকের কারণে আমাদের অটোমেটেড এআই অ্যাসিস্ট্যান্ট সাময়িকভাবে অফলাইনে রয়েছে। \n\nরেজিস্ট্রেশন, সরকারি সর্বোচ্চ ভর্তুকি, এবং ফ্রি কোটেশনের জন্য অনুগ্রহ করে আপনার **১) নাম, ২) ফোন নম্বর এবং ৩) জেলা** এখানে লিখে দিন। অথবা আমাদের সোলার টিমের সাথে সরাসরি যোগাযোগ করুন:\n📞 **৯০৭৩০৫৯৭৮০** / **৬২৮৯৬৩৮৬৪৯** (কল বা হোয়াটসঅ্যাপ করুন - Raimond Solar)`;
@@ -438,24 +444,46 @@ export default function RaimondSolarLandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-amber-100 p-0 m-0 font-sans">
 
+      {/* Google Tag Manager (Script) */}
+      <Script id="gtm-script" strategy="afterInteractive">
+        {`
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-5SMVTHW4');
+        `}
+      </Script>
+
+      {/* Google Tag Manager (noscript) */}
+      <noscript>
+        <iframe 
+          src="https://www.googletagmanager.com/ns.html?id=GTM-5SMVTHW4" 
+          height="0" 
+          width="0" 
+          style={{ display: 'none', visibility: 'hidden' }} 
+        />
+      </noscript>
+
       {/* Top Banner indicating Government Scheme validation */}
-      <div className="bg-amber-500 text-slate-950 font-black text-center py-2 px-3 sm:py-2 sm:px-4 text-[9px] xs:text-[10px] sm:text-xs tracking-wider z-50 flex items-center justify-center gap-1.5 sm:gap-2 font-display relative shadow-sm leading-tight">
-        <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-slate-950 animate-pulse shrink-0" /> 
-        <span>PM SURYA GHAR MANDATED GOVT. SUBSIDY APPROVED PARTNER</span>
-        <span className="hidden lg:inline bg-slate-950 text-white rounded px-2 py-0.5 ml-2">WBSEDCL REG. WBS-2849</span>
+      <div className="bg-amber-500 text-slate-950 font-black text-center py-2 px-3 sm:py-2.5 sm:px-4 text-[9px] xs:text-[10px] sm:text-xs tracking-wider z-50 flex flex-col items-center justify-center gap-1 font-display relative shadow-sm leading-tight">
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+          <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-slate-950 animate-pulse shrink-0" /> 
+          <span>RAIMOND SOLAR PVT LTD - AUTHORIZED SOLAR VENDOR & INTEGRATOR</span>
+        </div>
+        <div className="text-[8px] sm:text-[10px] text-slate-900 font-bold opacity-90">
+          We assist in PM Surya Ghar National Portal Subsidy applications as a registered vendor. Raimond Solar is an Empaneled Vendor under National Portal for WBSEDCL & CESC consumers.
+        </div>
       </div>
 
       {/* Modern Floating Header Bar */}
       <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md">
         <div className="max-w-7xl mx-auto py-3 px-3 sm:px-8 flex items-center justify-between gap-1.5 sm:gap-4">
-          <div className="flex flex-col shrink-0">
-            <span className="text-lg sm:text-2xl font-black tracking-tight text-slate-950 font-display">
-              RAIMOND <span className="text-amber-500">SOLAR</span>
+          <Link href="/" className="shrink-0">
+            <span className="text-xl font-bold tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display">
+              RAIMOND SOLAR PVT LTD
             </span>
-            <span className="text-[8px] sm:text-[10px] text-slate-500 font-extrabold tracking-wider sm:tracking-widest uppercase mt-0.5">
-              Raimond Solar • Kolkata
-            </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden xl:flex items-center gap-4 text-xs font-black tracking-tight text-slate-700 uppercase font-display">
@@ -508,8 +536,8 @@ export default function RaimondSolarLandingPage() {
             <a
               href="tel:9073059780"
               onClick={() => trackEvent("Phone Click", { location: "Nav Red Call Now Button" })}
-              id="header-cta-booking"
-              className="px-2.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-black bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center gap-1 sm:gap-1.5 shrink-0 animate-pulse"
+              id="gtm-call-btn"
+              className="gtm-call-click px-2.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-black bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center gap-1 sm:gap-1.5 shrink-0 animate-pulse"
               style={{ animationDuration: '3s' }}
             >
               <Phone className="w-3.5 h-3.5 fill-current shrink-0" /> <span className="hidden xs:inline">Call:</span> 9073059780
@@ -725,7 +753,7 @@ export default function RaimondSolarLandingPage() {
  
             {/* Bengali/English Hybrid Headline */}
             <h1 className="text-2xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white leading-tight font-display animate-fade-in">
-              সরকারি ভর্তুকির সুবিধায় নিজের বাড়িতে সোলার বসান ও <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4">বিদ্যুৎ বিল প্রায় শূন্য</span> করুন
+              সরকারি ভর্তুকির সুবিধায় নিজের বাড়িতে সোলার বসান ও <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন
             </h1>
  
             {/* Subheadline Details */}
@@ -745,7 +773,7 @@ export default function RaimondSolarLandingPage() {
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-white">WBSEDCL Full Office Support</h4>
-                  <p className="text-xs text-slate-400 mt-0.5">সরকারি পর্ষদের যাবতীয় কাজ ও অনুমোদন এখন আমাদের দায়িত্বে</p>
+                  <p className="text-xs text-slate-400 mt-0.5">আমরা আপনাকে WBSEDCL & CESC-এর আবেদন প্রক্রিয়াকরণ এবং প্রয়োজনীয় ডকুমেন্টস তৈরিতে সম্পূর্ণ সহায়তা প্রদান করি।</p>
                 </div>
               </div>
               <div className="flex items-start gap-2.5 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl">
@@ -758,8 +786,8 @@ export default function RaimondSolarLandingPage() {
               <div className="flex items-start gap-2.5 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white">₹78,000 Direct Subsidy Assist</h4>
-                  <p className="text-xs text-slate-400 mt-0.5">সরাসরি আপনার ব্যাঙ্ক অ্যাকাউন্টে সর্বোচ্চ সরকারি অনুদান</p>
+                  <h4 className="text-sm font-bold text-white">Up to ₹78,000 Estimated Subsidy Support</h4>
+                  <p className="text-xs text-slate-400 mt-0.5">সরকারি নির্দেশিকা অনুযায়ী সর্বোচ্চ অনুদানের আবেদন প্রক্রিয়াকরণে সম্পূর্ণ সহযোগিতা</p>
                 </div>
               </div>
             </div>
@@ -779,7 +807,8 @@ export default function RaimondSolarLandingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("WhatsApp Click", { location: "Hero Section Quick Link" })}
-                className="px-6 py-4 bg-[#25D366] hover:bg-[#20ba59] text-gray-950 font-black text-center rounded-2xl transition-all shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_12px_35px_rgba(37,211,102,0.65)] flex items-center justify-center gap-2 hover:scale-108 active:scale-95 duration-200 cursor-pointer border border-[#25D366]"
+                id="gtm-whatsapp-btn"
+                className="gtm-whatsapp-click px-6 py-4 bg-[#25D366] hover:bg-[#20ba59] text-gray-950 font-black text-center rounded-2xl transition-all shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_12px_35px_rgba(37,211,102,0.65)] flex items-center justify-center gap-2 hover:scale-108 active:scale-95 duration-200 cursor-pointer border border-[#25D366]"
               >
                 <WhatsAppIcon className="w-5 h-5 text-gray-950 fill-gray-950" /> 
                 <span>WhatsApp Now</span>
@@ -813,6 +842,7 @@ export default function RaimondSolarLandingPage() {
               {leadSubmitted ? (
                 <motion.div
                   key="thank-you-view"
+                  id="gtm-lead-success-message"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
@@ -843,7 +873,8 @@ export default function RaimondSolarLandingPage() {
                       href="https://wa.me/919073059780?text=I%20have%20registered%20for%20a%20solar%20consultation.%20Please%20provide%20pricing."
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-3 w-full py-4 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm rounded-2xl transition-all shadow-[0_4px_20px_rgba(16,185,129,0.35)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      id="gtm-whatsapp-btn"
+                      className="gtm-whatsapp-click flex items-center justify-center gap-3 w-full py-4 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm rounded-2xl transition-all shadow-[0_4px_20px_rgba(16,185,129,0.35)] hover:scale-[1.02] active:scale-95 cursor-pointer"
                     >
                       <WhatsAppIcon className="w-5 h-5 text-white fill-current" />
                       হোয়াটসঅ্যাপ চ্যাট (WhatsApp Now)
@@ -852,7 +883,8 @@ export default function RaimondSolarLandingPage() {
                     {/* Direct Phone Call Button */}
                     <a
                       href="tel:9073059780"
-                      className="flex items-center justify-center gap-3 w-full py-3.5 px-5 bg-slate-900 hover:bg-slate-800 text-white font-black text-sm rounded-2xl transition-all shadow-[0_4px_12px_rgba(15,23,42,0.15)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      id="gtm-call-btn"
+                      className="gtm-call-click flex items-center justify-center gap-3 w-full py-3.5 px-5 bg-slate-900 hover:bg-slate-800 text-white font-black text-sm rounded-2xl transition-all shadow-[0_4px_12px_rgba(15,23,42,0.15)] hover:scale-[1.02] active:scale-95 cursor-pointer"
                     >
                       <Phone className="w-4.5 h-4.5 text-amber-500 animate-pulse" />
                       সরাসরি কল করতে (Call Support)
@@ -892,7 +924,7 @@ export default function RaimondSolarLandingPage() {
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                       </span>
                       <span className="text-[9px] sm:text-[10px] bg-emerald-50 border border-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-black uppercase tracking-widest font-display inline-block">
-                        WBSEDCL Approved Registered Vendor
+                        Empaneled Vendor for WBSEDCL Consumers
                       </span>
                     </div>
                     <h3 className="text-2xl font-black text-slate-950 mt-1 tracking-tight font-display">Book Free Consultation</h3>
@@ -1086,7 +1118,7 @@ export default function RaimondSolarLandingPage() {
               <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase tracking-widest block font-display">3kWp - 10kWp Max</span>
               <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000</div>
               <div className="text-[10px] sm:text-xs text-emerald-800 bg-emerald-50 py-1.5 rounded-xl border border-emerald-100 font-bold leading-normal">
-                সর্বাধিক সাশ্রয় ও বিদ্যুৎ বিল প্রায় ০
+                সর্বাধিক সাশ্রয় ও দীর্ঘস্থায়ী বিদ্যুৎ উৎপাদন
               </div>
             </div>
 
@@ -1245,7 +1277,8 @@ export default function RaimondSolarLandingPage() {
                   <div className="pt-6 mt-5 border-t border-slate-100">
                     <button
                       onClick={() => handleClaimCalculatorPkg(pkg.id === "pkg-1kw" ? 1 : pkg.id === "pkg-2kw" ? 2 : pkg.id === "pkg-3kw" ? 3 : pkg.id === "pkg-4kw" ? 4 : 5)}
-                      className={`w-full py-3 px-4 rounded-xl font-black text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 ${
+                      id="gtm-book-package-btn"
+                      className={`gtm-book-package-click w-full py-3 px-4 rounded-xl font-black text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 ${
                         isHighlyRecommended
                           ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-md hover:shadow-emerald-600/30"
                           : "bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 hover:bg-amber-500 hover:text-slate-950 hover:border-amber-400"
@@ -1357,7 +1390,7 @@ export default function RaimondSolarLandingPage() {
                   </span>
                 </div>
                 <div className="bg-emerald-50/50 border border-emerald-100 p-4 rounded-2xl">
-                  <span className="text-[10px] text-emerald-700 block uppercase font-bold tracking-wider font-display">Assured Govt. Subsidy</span>
+                  <span className="text-[10px] text-emerald-700 block uppercase font-bold tracking-wider font-display">Estimated Govt. Subsidy (Subject to National Portal Approval)</span>
                   <span className="text-xl sm:text-2xl font-black font-mono text-emerald-600">
                     -₹{calculatedSubsidy.toLocaleString("en-IN")}
                   </span>
@@ -1412,7 +1445,7 @@ export default function RaimondSolarLandingPage() {
       <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="on-grid">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
-            West Bengal Solar Authority
+            About Raimond Solar Pvt Ltd
           </span>
           <h2 className="text-3xl font-black text-slate-950 font-display">
             Why West Bengal Trusts Raimond Solar Pvt Ltd
@@ -1426,9 +1459,9 @@ export default function RaimondSolarLandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-white border border-slate-200 p-6 rounded-3xl relative overflow-hidden shadow-sm">
             <ShieldCheck className="w-10 h-10 text-sky-600 mb-4" />
-            <h3 className="text-lg font-bold text-slate-950 mb-2 font-display">MNRE Approved & ISO Certified</h3>
+            <h3 className="text-lg font-bold text-slate-950 mb-2 font-display">ISO Certified Co.</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              র‍্যামন্ড সোলার সম্পূর্ণ সার্টিফাইড ও সরকারি নিয়মানুযায়ী তালিকাভুক্ত সোলার এন্টারপ্রাইজ কোম্পানি। যার ফলে আমাদের তৈরি সংযোগ সরাসরি সরকারি ভর্তুকির যোগ্য।
+              Raimond Solar Pvt Ltd সম্পূর্ণ সার্টিফাইড ও সরকারি নিয়মানুযায়ী তালিকাভুক্ত সোলার এন্টারপ্রাইজ কোম্পানি। আমাদের ইনস্টল করা সিস্টেমগুলি সরকারি নির্দেশিকা মেনে তৈরি, যা গ্রাহকদের ন্যাশনাল পোর্টালের মাধ্যমে ভর্তুকির আবেদন করার যোগ্য করে তোলে।
             </p>
           </div>
 
@@ -1444,7 +1477,7 @@ export default function RaimondSolarLandingPage() {
             <HardDrive className="w-10 h-10 text-emerald-600 mb-4" />
             <h3 className="text-lg font-bold text-slate-950 mb-2 font-display">WBSEDCL Full Office Assist</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              আপনার বাড়ির নতুন মিটারিং পরিবর্তন ও বিদ্যুৎ পর্ষদ (WBSEDCL) এর দপ্তরে আবেদন থেকে সংযোগ চালু হওয়া পর্যন্ত সমস্ত লাইসেন্স ও সরকারি কাজ আমাদের টিম করে দেবে।
+              আপনার বাড়ির নতুন মিটারিং পরিবর্তন ও বিদ্যুৎ পর্ষদ (WBSEDCL & CESC) এর দপ্তরে আবেদনের সমস্ত টেকনিক্যাল প্রসেস এবং প্রয়োজনীয় নথিপত্র তৈরিতে আমাদের এক্সপার্ট টিম আপনাকে সম্পূর্ণ সহযোগিতা করবে।
             </p>
           </div>
         </div>
@@ -1480,7 +1513,7 @@ export default function RaimondSolarLandingPage() {
             <div className="bg-white border border-slate-200 p-5 rounded-2xl relative shadow-sm">
               <span className="text-3xl font-black text-slate-200 absolute top-2 right-4">03</span>
               <h4 className="text-slate-900 font-bold text-sm font-display">Design Approve</h4>
-              <p className="text-xs text-slate-600 mt-2">বিদ্যুৎ পরিষদ (WBSEDCL) দপ্তরে সোলার স্কিমের ও সাবসিডির জন্য আবেদন করা হয়।</p>
+              <p className="text-xs text-slate-600 mt-2">গ্রাহকের পক্ষে MNRE ন্যাশনাল পোর্টাল এবং WBSEDCL & CESC-এর নিয়ম মেনে সোলার স্কিম ও সাবসিডির ডিজিটাল আবেদন প্রক্রিয়াকরণে আমরা সম্পূর্ণ সহযোগিতা করি।</p>
             </div>
             <div className="bg-white border border-slate-200 p-5 rounded-2xl relative shadow-sm">
               <span className="text-3xl font-black text-slate-200 absolute top-2 right-4">04</span>
@@ -1495,7 +1528,7 @@ export default function RaimondSolarLandingPage() {
             <div className="bg-white border border-slate-200 p-5 rounded-2xl relative shadow-sm">
               <span className="text-3xl font-black text-slate-200 absolute top-2 right-4">06</span>
               <h4 className="text-slate-900 font-bold text-sm font-display">Subsidy Pay</h4>
-              <p className="text-xs text-slate-600 mt-2">আপনার ব্যাঙ্ক অ্যাকাউন্টে সরাসরি সরকারি সুর্যঘর সোলার ভর্তুকি ক্লেইম ক্লিয়ার করা হয়।</p>
+              <p className="text-xs text-slate-600 mt-2">সোলার সিস্টেম চালু হওয়ার পর সরকারি নির্দেশিকা অনুযায়ী ন্যাশনাল পোর্টালের মাধ্যমে আপনার ব্যাঙ্ক অ্যাকাউন্টে সরাসরি ভর্তুকি ক্রেডিট হওয়ার প্রক্রিয়ায় আমরা প্রয়োজনীয় সহায়তা প্রদান করি।</p>
             </div>
           </div>
 
@@ -1504,45 +1537,71 @@ export default function RaimondSolarLandingPage() {
 
       {/* VIDEO GALLERY SECTION */}
       <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="video">
-        <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
-            Project Visual Proofs
+            Solar Learning Hub / Educational Video Guides (সোলার গাইড ভিডিও)
           </span>
           <h2 className="text-3xl font-black text-slate-950 font-display">
-            Raimond Solar Video Gallery (কাজের ভিডিও)
+            Video Learning & Case Studies
           </h2>
-          <p className="text-slate-655 text-slate-600 text-sm mt-2 font-semibold">
-            পশ্চিমবঙ্গের বিভিন্ন জেলায় আমাদের সম্পূর্ণ করা সোলার কাজের সাইট ভিডিও সরাসরি ইউটিউবের মাধ্যমে দেখে নিন।
+          <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
+            সোলার সিস্টেমের ব্যবহার, ১kWp থেকে ৫kWp-এর বিভিন্ন প্যাকেজের আসল ক্ষমতা এবং বিদ্যুৎ বিল সাশ্রয়ের সঠিক গাইডলাইন সরাসরি ভিডিওর মাধ্যমে দেখে নিন।
           </p>
         </div>
 
         {/* 6 YouTube Short URL iframe grids */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {[
-            { id: "blyGZSIVA5s", label: "Residential Unit Setup Review" },
-            { id: "pcJ73U5KKT8", label: "High Efficiency TOPCon Installer Guide" },
-            { id: "PTHv4WqkDdM", label: "WBSEDCL Net Metering Commissioning" },
-            { id: "sUI8iHyCXp0", label: "Subsidy Scheme Claim Process" },
-            { id: "PqHhUsqRGSY", label: "Rooftop Solar Structural Work" },
-            { id: "BlV_DfqRtUo", label: "Customer Experience & Bill Savings Verdict" },
+            {
+              id: "blyGZSIVA5s",
+              title: "Raimond Solar Guide - 1kW Solar Load Analysis",
+              desc: "১kW Solar দিয়ে কি কি চালাতে পারবেন?  সঠিক এবং বাস্তব সত্যটি এই ভিডিওর মাধ্যমে জেনে নিন।"
+            },
+            {
+              id: "pcJ73U5KKT8",
+              title: "Raimond Solar Guide - 2kW Solar & AC Compatibility",
+              desc: "২kW Solar দিয়ে কি কি চালাতে পারবেন? এসি (AC) কেন চলবে কি না, তার আসল বৈজ্ঞানিক সত্যটি জানুন।"
+            },
+            {
+              id: "PTHv4WqkDdM",
+              title: "Raimond Solar Guide - 3kW Solar Appliance Guide",
+              desc: "৩kW সোলার সিস্টেমে বাড়িতে কি কি লোড চলবে? এসি (AC) চালানো কি সম্ভব? বিস্তারিত সত্যটি দেখে নিন।"
+            },
+            {
+              id: "sUI8iHyCXp0",
+              title: "Raimond Solar Guide - 5kW System Calculation",
+              desc: "৫ কিলোওয়াট (5 kW) সোলার সিস্টেমের সহজ হিসাব! ৫kW সোলার দিয়ে কি ২টি দেড় টনের এসি (1.5 Ton AC) চালানো সম্ভব? আপনার বাড়ির জন্য অন-গ্রিড (On-Grid) নাকি অফ-গ্রিড (Off-Grid) কোনটা সেরা, তা জানুন।"
+            },
+            {
+              id: "PqHhUsqRGSY",
+              title: "Raimond Solar Guide - Important Setup Precautions",
+              desc: "Warning 🚨 সোলার লাগানোর আগে ৩টি অত্যন্ত জরুরি এবং আইনি পদ্ধতি অবশ্যই জেনে রাখুন।"
+            },
+            {
+              id: "BlV_DfqRtUo",
+              title: "Raimond Solar Guide - 90% Bill Reduction Strategy",
+              desc: "কিভাবে আপনার বাড়ীর ইলেকট্রিক বিল ৯০% পর্যন্ত কমাবেন? Raimond Solar দেবে তার সঠিক ও নির্ভরযোগ্য সমাধান।"
+            }
           ].map((vid) => (
             <div
               key={vid.id}
-              className="bg-white border border-slate-200 rounded-2xl overflow-hidden p-2 sm:p-3 relative flex flex-col justify-between hover:border-amber-400 transition-all shadow-sm"
+              className="bg-white border border-slate-200 rounded-3xl overflow-hidden p-4 relative flex flex-col justify-between hover:border-amber-400 hover:shadow-lg transition-all shadow-sm"
+              id={`video-card-${vid.id}`}
             >
               {/* YouTube Iframe element */}
-              <div className="relative aspect-[9/16] w-full max-h-[440px] bg-black rounded-xl overflow-hidden shadow-inner">
+              <div className="relative aspect-[9/16] w-full max-h-[440px] bg-black rounded-2xl overflow-hidden shadow-inner">
                 <iframe
                   src={`https://www.youtube.com/embed/${vid.id}`}
-                  title={vid.label}
+                  title={vid.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="pt-2 sm:pt-3.5 px-1 pb-0.5 text-left">
-                <div className="text-[8px] xs:text-[10px] text-amber-600 font-bold tracking-wider uppercase font-display">Raimond Project</div>
-                <div className="text-[10px] xs:text-xs font-black text-slate-900 mt-0.5 leading-tight line-clamp-1">{vid.label}</div>
+              <div className="pt-4 text-left">
+                <div className="text-[10px] text-amber-600 font-extrabold tracking-wider uppercase font-display mb-1 font-sans">Raimond Solar Guide</div>
+                <h3 className="text-sm font-black text-slate-950 font-display leading-tight mb-2">{vid.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-semibold">{vid.desc}</p>
               </div>
             </div>
           ))}
@@ -1638,14 +1697,15 @@ export default function RaimondSolarLandingPage() {
               Immediate Assistance Line
             </span>
             <h3 className="text-2xl font-black font-display text-white">বিনা মূল্যে আপনার ছাদের সার্ভে করতে চান?</h3>
-            <p className="text-slate-400 text-xs sm:text-sm">অগ্রিম সরকারি সোলার ভর্তুকি বুকিং করতে নিচের নম্বরে ফোন করুন অথবা কল করতে আবেদন করুন।</p>
+            <p className="text-slate-400 text-xs sm:text-sm">বিনা মূল্যে আপনার ছাদের সার্ভে ও সোলার কনসালটেশনের জন্য নিচের নম্বরে ফোন করুন অথবা কল করতে আবেদন করুন।</p>
           </div>
 
           <div className="flex flex-col lg:flex-row items-center gap-4 w-full md:w-auto shrink-0">
             <a 
               href="tel:9073059780"
               onClick={() => trackEvent("Phone Click", { location: "Footer Banner Call CTA" })}
-              className="px-6 py-4 bg-rose-600 hover:bg-rose-700 text-white font-black text-center rounded-2xl transition-all shadow-[0_5px_15px_rgba(225,29,72,0.3)] hover:shadow-[0_10px_25px_rgba(225,29,72,0.5)] hover:scale-110 active:scale-95 duration-250 flex items-center justify-center gap-2"
+              id="gtm-call-btn"
+              className="gtm-call-click px-6 py-4 bg-rose-600 hover:bg-rose-700 text-white font-black text-center rounded-2xl transition-all shadow-[0_5px_15px_rgba(225,29,72,0.3)] hover:shadow-[0_10px_25px_rgba(225,29,72,0.5)] hover:scale-110 active:scale-95 duration-250 flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4 text-white font-black" /> Call 9073059780
             </a>
@@ -1671,8 +1731,8 @@ export default function RaimondSolarLandingPage() {
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackEvent("WhatsApp Click", { location: "Floating Action Button" })}
-        className="fixed bottom-24 right-6 z-45 w-14 h-14 bg-[#25D366] hover:bg-[#20ba59] rounded-full flex items-center justify-center transition-all shadow-[0_4px_16px_rgba(37,211,102,0.45)] hover:scale-110 select-none group hidden md:flex"
-        id="floating-whatsapp-btn"
+        className="gtm-whatsapp-click fixed bottom-24 right-6 z-45 w-14 h-14 bg-[#25D366] hover:bg-[#20ba59] rounded-full flex items-center justify-center transition-all shadow-[0_4px_16px_rgba(37,211,102,0.45)] hover:scale-110 select-none group hidden md:flex"
+        id="gtm-whatsapp-btn"
       >
         <WhatsAppIcon className="w-7 h-7 text-white" />
         <span className="absolute right-16 bg-slate-950 border border-slate-800 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all font-semibold shadow-md pointer-events-none">
@@ -1685,8 +1745,8 @@ export default function RaimondSolarLandingPage() {
         <a
           href="tel:9073059780"
           onClick={() => trackEvent("Phone Click", { location: "Sticky Mobile Bottom Bar" })}
-          id="sticky-mobile-call"
-          className="flex flex-col items-center justify-center py-2 px-1 bg-rose-600 rounded-xl transition-all text-white font-black hover:bg-rose-700 hover:scale-110 hover:shadow-rose-600/50 hover:shadow-lg active:scale-95 duration-200"
+          id="gtm-call-btn"
+          className="gtm-call-click flex flex-col items-center justify-center py-2 px-1 bg-rose-600 rounded-xl transition-all text-white font-black hover:bg-rose-700 hover:scale-110 hover:shadow-rose-600/50 hover:shadow-lg active:scale-95 duration-200"
         >
           <Phone className="w-4 h-4 text-white" />
           <span className="text-[9px] mt-1 font-display">Call Now</span>
@@ -1697,8 +1757,8 @@ export default function RaimondSolarLandingPage() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackEvent("WhatsApp Click", { location: "Sticky Mobile Bottom Bar" })}
-          id="sticky-mobile-whatsapp"
-          className="flex flex-col items-center justify-center py-2 px-1 bg-[#25D366] rounded-xl transition-all text-white font-bold hover:bg-[#20ba59]"
+          id="gtm-whatsapp-btn"
+          className="gtm-whatsapp-click flex flex-col items-center justify-center py-2 px-1 bg-[#25D366] rounded-xl transition-all text-white font-bold hover:bg-[#20ba59]"
         >
           <WhatsAppIcon className="w-4 h-4 text-white" />
           <span className="text-[9px] mt-1 font-display">WhatsApp</span>
@@ -1868,7 +1928,7 @@ export default function RaimondSolarLandingPage() {
             </p>
             <div className="text-[10px] text-sky-700 font-bold flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-sky-600" /> 
-              <span>Approved MNRE Partner • ISO Certified</span>
+              <span>ISO Certified Co.</span>
             </div>
           </div>
 
@@ -1919,22 +1979,88 @@ export default function RaimondSolarLandingPage() {
                 WhatsApp Chat: <a href="https://wa.me/919073059780" className="text-[#25D366] hover:underline font-mono font-bold">9073059780</a>
               </li>
               <li>
-                Email Desk: <a href="mailto:raimondsolar83@gmail.com" className="text-slate-700 hover:underline">raimondsolar83@gmail.com</a>
+                Email Desk: <a href="mailto:info@raimondsolar.in" className="text-slate-700 hover:underline">info@raimondsolar.in</a>
               </li>
             </ul>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-slate-200 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-semibold">
+        <div className="max-w-7xl mx-auto border-t border-slate-200 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-semibold gap-4">
           <div>
             © 2026 Raimond Solar Pvt Ltd. All Rights Reserved. Meta Pixel is fully configured on active nodes.
           </div>
-          <div className="flex gap-4 mt-2 sm:mt-0 text-slate-500 font-display font-bold">
+          <div className="flex flex-wrap gap-4 mt-2 sm:mt-0 text-slate-500 font-display font-bold">
             <a href="/admin" className="hover:text-amber-600 hover:underline">Admin CRM Panel</a>
+            <a href="/privacy-policy" className="hover:text-amber-600 hover:underline cursor-pointer">Privacy Policy</a>
+            <a href="/terms-and-conditions" className="hover:text-amber-600 hover:underline cursor-pointer">Terms of Service</a>
           </div>
         </div>
+
+        <div className="max-w-7xl mx-auto mt-6 text-[10px] text-slate-400 leading-relaxed text-center border-t border-slate-200/50 pt-4">
+          Disclaimer: Raimond Solar Pvt Ltd is an independent, private solar energy engineering and installation company. We are a registered vendor for WBSEDCL & CESC consumers of West Bengal. Please note that we are NOT a government organization, nor are we the official website of the PM Surya Ghar Muft Bijli Yojana, WBSEDCL or CESC. Subsidies are subject to clearance and rules set by the Government of India and respective electricity boards.
+        </div>
       </footer>
+
+      {/* Privacy Policy Modal */}
+      <AnimatePresence>
+        {isPrivacyOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-slate-100 relative text-left text-slate-900"
+            >
+              <button 
+                onClick={() => setIsPrivacyOpen(false)}
+                className="absolute top-4 right-4 p-1.5 hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <h3 className="text-xl sm:text-2xl font-black mb-4 text-slate-900 font-display">Privacy Policy</h3>
+              <div className="text-xs text-slate-600 space-y-3 leading-relaxed">
+                <p className="font-bold">Last Updated: June 12, 2026</p>
+                <p>Welcome to Raimond Solar Pvt Ltd (&apos;we,&apos; &apos;our,&apos; or &apos;us&apos;). We values your privacy and are committed to protecting your personal data in accordance with applicable legal guidelines.</p>
+                <p><strong>1. Information We Collect:</strong> We collect personal details that you voluntarily submit to us via our pricing calculator and consultation inquiry forms, which include your Name, Phone Number, Monthly Electricity Bill Range, Preferred System Capacity, and District Location.</p>
+                <p><strong>2. How We Use Informational Data:</strong> The captured details are strictly processed to schedule on-site engineering surveys, evaluate technical grid capabilities, calculate rooftop solar output capacity, assist in MNRE/PM Surya Ghar applications, and optimize solar product consultation. We do not engage in renting or selling your personal information to third-party brokers.</p>
+                <p><strong>3. Security Safeguards:</strong> We employ robust security measures, restricted firewall parameters, and data protection practices to safeguard information from unauthorized modification, tracking, or access.</p>
+                <p><strong>4. Contact Details:</strong> For questions concerning this policy, please reach us immediately at <a href="mailto:info@raimondsolar.in" className="text-sky-600 underline">info@raimondsolar.in</a>.</p>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Terms of Service Modal */}
+      <AnimatePresence>
+        {isTermsOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-slate-100 relative text-left text-slate-900"
+            >
+              <button 
+                onClick={() => setIsTermsOpen(false)}
+                className="absolute top-4 right-4 p-1.5 hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <h3 className="text-xl sm:text-2xl font-black mb-4 text-slate-900 font-display">Terms of Service</h3>
+              <div className="text-xs text-slate-600 space-y-3 leading-relaxed">
+                <p className="font-bold">Last Updated: June 12, 2026</p>
+                <p>By accessing or navigating the Raimond Solar Pvt Ltd platform, you agree to comply with and be bound by the following Terms of Service:</p>
+                <p><strong>1. Private Enterprise Disclaimer:</strong> Raimond Solar Pvt Ltd is an independent, private solar engineering organization and MNRE list-integrated solar installation vendor in West Bengal. We are not a government entity, nor are we representing PM Surya Ghar Scheme directly. Any government portal submissions are cooperative assistance services.</p>
+                <p><strong>2. Quote & Estimates Accuracy:</strong> Calculations, ROI estimations, and subsidy numbers generated by the on-site calculator tool are highly detailed estimations intended purely for engineering and budgetary analysis. Actual price sheets vary depending on spatial layout constraints, roof shading, sub-district wiring configurations, and national-level subsidy approvals.</p>
+                <p><strong>3. Use Restrictions:</strong> Homeowners confirm that accurate customer billing and electricity records are provided for technical verification. User data is utilized strictly for technical feasibility reviews.</p>
+                <p><strong>4. Governing Authority:</strong> These terms are governed under Indian jurisdiction and MNRE / regional regulatory framework protocols of West Bengal.</p>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
