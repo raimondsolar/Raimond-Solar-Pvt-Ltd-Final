@@ -480,7 +480,7 @@ export default function RaimondSolarLandingPage() {
       <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md relative">
         <div className="max-w-7xl mx-auto py-3 px-2 sm:px-8 flex items-center justify-between gap-1 sm:gap-4">
           <Link href="/" className="shrink-0">
-            <span className="text-xs xs:text-sm sm:text-base md:text-xl font-black tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display">
+            <span className="text-lg sm:text-xl md:text-2xl font-black tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display">
               RAIMOND SOLAR PVT LTD
             </span>
           </Link>
@@ -547,13 +547,13 @@ export default function RaimondSolarLandingPage() {
             {/* Mobile / Tablet Hamburger Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="xl:hidden p-1.5 sm:p-2 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 shrink-0 flex items-center justify-center"
+              className="xl:hidden w-11 h-11 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border-2 border-slate-200 shrink-0 flex items-center justify-center"
               aria-label="Toggle Menu"
             >
               {isMobileMenuOpen ? (
-                <X className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-rose-600" strokeWidth={3} />
               ) : (
-                <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" strokeWidth={3} />
               )}
             </button>
           </div>
