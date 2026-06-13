@@ -466,12 +466,12 @@ export default function RaimondSolarLandingPage() {
       </noscript>
 
       {/* Top Banner indicating Government Scheme validation */}
-      <div className="bg-amber-500 text-slate-950 font-black text-center py-2 px-3 sm:py-2.5 sm:px-4 text-[9px] xs:text-[10px] sm:text-xs tracking-wider z-50 flex flex-col items-center justify-center gap-1 font-display relative shadow-sm leading-tight">
-        <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-          <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-slate-950 animate-pulse shrink-0" /> 
-          <span>RAIMOND SOLAR PVT LTD - AUTHORIZED SOLAR VENDOR & INTEGRATOR</span>
+      <div className="bg-amber-500 text-slate-950 font-black text-center py-3.5 px-4 sm:py-5 sm:px-6 z-50 flex flex-col items-center justify-center gap-1.5 sm:gap-2 font-display relative shadow-sm leading-normal">
+        <div className="flex items-center justify-center gap-2 sm:gap-2.5 flex-wrap">
+          <Sun className="w-4.5 h-4.5 sm:w-5 sm:h-5 fill-slate-950 animate-pulse shrink-0" /> 
+          <span className="text-xs xs:text-sm sm:text-base md:text-lg tracking-wide uppercase font-extrabold text-slate-950">RAIMOND SOLAR PVT LTD - AUTHORIZED SOLAR VENDOR & INTEGRATOR</span>
         </div>
-        <div className="text-[8px] sm:text-[10px] text-slate-900 font-bold opacity-90">
+        <div className="text-[11px] xs:text-xs sm:text-sm md:text-base text-slate-900 font-bold opacity-95 max-w-4xl mx-auto leading-relaxed">
           We assist in PM Surya Ghar National Portal Subsidy applications as a registered vendor. Raimond Solar is an Empaneled Vendor under National Portal for WBSEDCL & CESC consumers.
         </div>
       </div>
@@ -537,11 +537,11 @@ export default function RaimondSolarLandingPage() {
               href="tel:9073059780"
               onClick={() => trackEvent("Phone Click", { location: "Nav Red Call Now Button" })}
               id="gtm-call-btn"
-              className="gtm-call-click px-2 sm:px-4 py-1.5 sm:py-2.5 text-[10px] sm:text-xs md:text-sm font-black bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center gap-1 sm:gap-1.5 shrink-0 animate-pulse"
+              className="gtm-call-click px-4 sm:px-5 py-2.5 sm:py-3 text-base md:text-lg font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 animate-pulse font-display"
               style={{ animationDuration: '3s' }}
             >
-              <Phone className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current shrink-0" />
-              <span className="font-mono">9073059780</span>
+              <Phone className="w-4 sm:w-5 h-4 sm:h-5 fill-current shrink-0 text-white" />
+              <span className="font-mono tracking-tight font-black text-white">9073059780</span>
             </a>
 
             {/* Mobile / Tablet Hamburger Toggle Button */}
@@ -764,16 +764,20 @@ export default function RaimondSolarLandingPage() {
           <div className="lg:col-span-7 space-y-6 text-left">
  
             {/* Bengali/English Hybrid Headline */}
-            <h1 className="text-2xl sm:text-4xl lg:text-6xl font-black tracking-tight text-white leading-tight font-display animate-fade-in">
-              সরকারি ভর্তুকির সুবিধায় নিজের বাড়িতে সোলার বসান ও <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight font-display animate-fade-in text-center lg:text-left space-y-1.5 lg:space-y-0">
+              <span className="block lg:inline">সরকারি ভর্তুকির সুবিধায়</span>{" "}
+              <span className="block lg:inline font-black text-amber-500">নিজের বাড়িতে সোলার বসান ও</span>{" "}
+              <span className="block lg:inline">
+                <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4 inline-block lg:inline">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন
+              </span>
             </h1>
  
             {/* Subheadline Details */}
-            <p className="text-slate-100 text-base sm:text-lg max-w-xl leading-relaxed drop-shadow-sm font-semibold">
-              পশ্চিমবঙ্গের সর্বাধিক নির্ভরযোগ্য সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/40 px-1 py-0.5 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
+            <p className="text-slate-100 text-lg sm:text-xl lg:text-2xl max-w-2xl leading-relaxed drop-shadow-sm font-bold text-center lg:text-left mt-4">
+              পশ্চিমবঙ্গের সর্বাধিক নির্ভরযোগ্য সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/50 px-2 py-1 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
             </p>
  
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl mx-auto lg:mx-0 text-left">
               <div className="flex items-start gap-2.5 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
@@ -805,7 +809,7 @@ export default function RaimondSolarLandingPage() {
             </div>
  
             {/* Hero Interactive CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 justify-center lg:justify-start">
               <button
                 onClick={() => scrollToSection("price")}
                 className="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-center rounded-2xl transition-all shadow-[0_5px_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 hover:scale-108 hover:shadow-emerald-500/40 active:scale-95 duration-200 cursor-pointer"
