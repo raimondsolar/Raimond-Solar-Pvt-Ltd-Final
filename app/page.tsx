@@ -477,10 +477,10 @@ export default function RaimondSolarLandingPage() {
       </div>
 
       {/* Modern Floating Header Bar */}
-      <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md">
-        <div className="max-w-7xl mx-auto py-3 px-3 sm:px-8 flex items-center justify-between gap-1.5 sm:gap-4">
+      <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md relative">
+        <div className="max-w-7xl mx-auto py-3 px-2 sm:px-8 flex items-center justify-between gap-1 sm:gap-4">
           <Link href="/" className="shrink-0">
-            <span className="text-xl font-bold tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display">
+            <span className="text-xs xs:text-sm sm:text-base md:text-xl font-black tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display">
               RAIMOND SOLAR PVT LTD
             </span>
           </Link>
@@ -531,30 +531,35 @@ export default function RaimondSolarLandingPage() {
             </button>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
             {/* RED DUAL-DESKTOP/MOBILE CT CUSTOM CALL BUTTON */}
             <a
               href="tel:9073059780"
               onClick={() => trackEvent("Phone Click", { location: "Nav Red Call Now Button" })}
               id="gtm-call-btn"
-              className="gtm-call-click px-2.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-black bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center gap-1 sm:gap-1.5 shrink-0 animate-pulse"
+              className="gtm-call-click px-2 sm:px-4 py-1.5 sm:py-2.5 text-[10px] sm:text-xs md:text-sm font-black bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-md transition-all duration-200 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-rose-600/30 flex items-center gap-1 sm:gap-1.5 shrink-0 animate-pulse"
               style={{ animationDuration: '3s' }}
             >
-              <Phone className="w-3.5 h-3.5 fill-current shrink-0" /> <span className="hidden xs:inline">Call:</span> 9073059780
+              <Phone className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current shrink-0" />
+              <span className="font-mono">9073059780</span>
             </a>
 
             {/* Mobile / Tablet Hamburger Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="xl:hidden p-2 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200"
+              className="xl:hidden p-1.5 sm:p-2 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200 shrink-0 flex items-center justify-center"
               aria-label="Toggle Menu"
             >
-              <Menu className="w-5 h-5" />
+              {isMobileMenuOpen ? (
+                <X className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" />
+              ) : (
+                <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
+              )}
             </button>
           </div>
         </div>
 
-        {/* Mobile menu drop-down with slick animations */}
+        {/* Mobile menu drop-down with slick animations - Positioned Absolutely to prevent page shifting */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -562,71 +567,78 @@ export default function RaimondSolarLandingPage() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="xl:hidden border-t border-slate-200/80 bg-white shadow-inner overflow-hidden text-left"
+              className="xl:hidden absolute top-full left-0 right-0 border-t border-slate-200/80 bg-white shadow-xl overflow-hidden text-left z-50 max-h-[82vh] overflow-y-auto"
             >
-              <div className="px-4 py-4 space-y-3.5 flex flex-col font-display font-black text-sm uppercase tracking-wider text-slate-800">
+              <div className="px-5 py-5 space-y-1.5 flex flex-col font-display font-black text-xs uppercase tracking-wider text-slate-800">
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("home");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl border-0 cursor-pointer flex items-center justify-between group"
                 >
-                  Home
+                  <span>Home</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("on-grid");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl border-0 cursor-pointer flex items-center justify-between group"
                 >
-                  Solar On-Grid System
+                  <span>Solar On-Grid System</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("price");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl border-0 cursor-pointer flex items-center justify-between group"
                 >
-                  Price
+                  <span>Price</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("packages");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl border-0 cursor-pointer flex items-center justify-between group"
                 >
-                  Package Options
+                  <span>Package Options</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("subsidy-calculator");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl border-0 cursor-pointer flex items-center justify-between group"
                 >
-                  Smart Subsidy Calculator
+                  <span>Smart Subsidy Calculator</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("video");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all border-b border-slate-100 hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl border-0 cursor-pointer flex items-center justify-between group"
                 >
-                  Raimond Solar Video
+                  <span>Raimond Solar Video</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     scrollToSection("faq");
                   }}
-                  className="w-full text-left py-2 hover:text-amber-500 transition-all hover:pl-2 bg-transparent border-0 cursor-pointer"
+                  className="w-full text-left py-3 px-3 hover:text-amber-500 hover:bg-slate-50 transition-all rounded-xl cursor-pointer flex items-center justify-between group"
                 >
-                  FAQ
+                  <span>FAQ</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </motion.div>
@@ -1010,7 +1022,7 @@ export default function RaimondSolarLandingPage() {
                     </div>
 
                     {/* Monthly Bill & Preferred System */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
                       <div>
                         <label htmlFor="monthlyBill" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
                           মাসিক বিল (Avg Bill)
@@ -1094,7 +1106,7 @@ export default function RaimondSolarLandingPage() {
       {/* SUBSIDY QUICK HIGHLIGHT GRID - Clean Material Gradient Card Section */}
       <section className="py-8 bg-gradient-to-b from-white to-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             <div className="bg-white border border-slate-200 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.08] active:scale-95 hover:border-amber-400/50 cursor-pointer">
               <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">1kWp Solar Unit</span>
               <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹30,000</div>
@@ -1162,7 +1174,7 @@ export default function RaimondSolarLandingPage() {
               </span>
               Recommended Solar System Based on Your Monthly Electricity Bill
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5 sm:gap-5">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-5 gap-3.5 sm:gap-5">
               {[
                 { size: "1kWp Solar System", bill: "₹500 - ₹1,000", bg: "from-amber-50/30 to-amber-100/10" },
                 { size: "2kWp Solar System", bill: "₹1,000 - ₹2,000", bg: "from-sky-50/30 to-sky-100/10" },
@@ -1172,7 +1184,7 @@ export default function RaimondSolarLandingPage() {
               ].map((item, index) => (
                 <div 
                   key={index} 
-                  className={`bg-white border-2 border-slate-200/80 p-3.5 sm:p-5 rounded-2xl text-center relative shadow-sm hover:border-emerald-500 hover:shadow-xl transition-all duration-300 transform scale-100 hover:scale-[1.08] active:scale-[1.03] select-none cursor-pointer flex flex-col justify-between min-h-[125px] sm:min-h-[145px] group ${index === 4 ? "col-span-2 md:col-span-1" : ""}`}
+                  className={`bg-white border-2 border-slate-200/80 p-3.5 sm:p-5 rounded-2xl text-center relative shadow-sm hover:border-emerald-500 hover:shadow-xl transition-all duration-300 transform scale-100 hover:scale-[1.08] active:scale-[1.03] select-none cursor-pointer flex flex-col justify-between min-h-[125px] sm:min-h-[145px] group ${index === 4 ? "col-span-1 xs:col-span-2 md:col-span-1" : ""}`}
                 >
                   {item.tag && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[8px] sm:text-[9px] font-black uppercase px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full tracking-wider shadow-sm z-10 whitespace-nowrap">
@@ -1303,7 +1315,7 @@ export default function RaimondSolarLandingPage() {
             <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
               Smart Financial Forecaster
             </span>
-            <h2 className="text-3xl font-black text-slate-950 font-display">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 font-display">
               Solar Savings & Grid Subsidy Calculator
             </h2>
             <p className="text-slate-600 text-sm mt-2 max-w-xl mx-auto font-medium">
@@ -1382,7 +1394,7 @@ export default function RaimondSolarLandingPage() {
 
             {/* Calculations outputs with beautiful visual frames */}
             <div className="lg:col-span-7 bg-white border border-slate-200 p-6 rounded-3xl flex flex-col justify-between shadow-sm relative overflow-hidden">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
                   <span className="text-[10px] text-slate-500 block uppercase font-bold tracking-wider font-display">Estimated Gross Cost</span>
                   <span className="text-xl sm:text-2xl font-black font-mono text-slate-900">
@@ -1411,7 +1423,7 @@ export default function RaimondSolarLandingPage() {
               </div>
 
               {/* Savings grids */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center">
+              <div className="grid grid-cols-1 xs:grid-cols-3 gap-2 sm:gap-3 text-center">
                 <div className="p-2.5 sm:p-3 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-between">
                   <h5 className="text-[8px] xs:text-[9px] sm:text-[10px] text-slate-500 uppercase font-black font-display leading-tight">Monthly savings</h5>
                   <div className="text-xs xs:text-sm sm:text-base font-bold font-mono text-slate-950 mt-1">~₹{calculatedMonthlySavings.toLocaleString("en-IN")}</div>
@@ -1447,7 +1459,7 @@ export default function RaimondSolarLandingPage() {
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
             About Raimond Solar Pvt Ltd
           </span>
-          <h2 className="text-3xl font-black text-slate-950 font-display">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 font-display">
             Why West Bengal Trusts Raimond Solar Pvt Ltd
           </h2>
           <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
@@ -1541,7 +1553,7 @@ export default function RaimondSolarLandingPage() {
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
             Solar Learning Hub / Educational Video Guides (সোলার গাইড ভিডিও)
           </span>
-          <h2 className="text-3xl font-black text-slate-950 font-display">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 font-display">
             Video Learning & Case Studies
           </h2>
           <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
@@ -1614,7 +1626,7 @@ export default function RaimondSolarLandingPage() {
           <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
             Solar Information Base
           </span>
-          <h2 className="text-3xl font-black text-slate-950 font-display">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 font-display">
             Frequently Asked Questions (FAQ)
           </h2>
           <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
