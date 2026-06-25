@@ -37,6 +37,91 @@ const WhatsAppIcon = ({ className = "w-5 h-5", ...props }: React.ComponentPropsW
   </svg>
 );
 
+// Scalable, high-quality representation of the official Raimond Solar Logo
+const RaimondSolarLogo = ({ className = "w-10 h-10" }: { className?: string }) => (
+  <svg viewBox="0 0 500 350" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Sun rays radiating from the center arc */}
+    <g stroke="#F59E0B" strokeWidth="6" strokeLinecap="round">
+      <line x1="250" y1="130" x2="250" y2="15" />
+      <line x1="250" y1="130" x2="295" y2="24" />
+      <line x1="250" y1="130" x2="338" y2="44" />
+      <line x1="250" y1="130" x2="376" y2="74" />
+      <line x1="250" y1="130" x2="405" y2="114" />
+      <line x1="250" y1="130" x2="425" y2="160" />
+      <line x1="250" y1="130" x2="205" y2="24" />
+      <line x1="250" y1="130" x2="162" y2="44" />
+      <line x1="250" y1="130" x2="124" y2="74" />
+      <line x1="250" y1="130" x2="95" y2="114" />
+      <line x1="250" y1="130" x2="75" y2="160" />
+    </g>
+
+    {/* Sun Arch (outer half-ring) */}
+    <path d="M 75 160 A 175 175 0 0 1 425 160" fill="none" stroke="url(#logo-sun-gradient)" strokeWidth="18" />
+
+    {/* Semi-circle contents with clip path */}
+    <g clipPath="url(#logo-semi-circle-clip)">
+      {/* Background of the semi-circle */}
+      <path d="M 85 160 A 165 165 0 0 1 415 160 Z" fill="#FFFDF0" />
+
+      {/* Left Half: Green Leaf Area */}
+      {/* Big Leaf */}
+      <path d="M 135 155 C 135 110, 185 90, 230 110 C 230 135, 180 160, 135 155 Z" fill="#2E7D32" />
+      <path d="M 135 155 C 150 135, 195 125, 230 110" stroke="#FFF" strokeWidth="3" strokeLinecap="round" />
+      
+      {/* Small Leaf */}
+      <path d="M 175 115 C 175 85, 215 70, 245 90 C 245 110, 205 125, 175 115 Z" fill="#81C784" />
+      <path d="M 175 115 C 185 102, 220 95, 245 90" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* Right Half: Solar Panel Grid Area */}
+      {/* Blue background for solar panel */}
+      <path d="M 250 160 A 165 165 0 0 1 415 160 Z" fill="#0284C7" />
+      
+      {/* Solar Panel grid lines */}
+      <g stroke="#E0F2FE" strokeWidth="4">
+        <line x1="250" y1="160" x2="250" y2="-5" />
+        <line x1="250" y1="160" x2="291" y2="5" />
+        <line x1="250" y1="160" x2="332" y2="15" />
+        <line x1="250" y1="160" x2="373" y2="35" />
+        <line x1="250" y1="160" x2="414" y2="75" />
+        
+        <path d="M 250 160 A 40 40 0 0 1 415 160" fill="none" />
+        <path d="M 250 160 A 80 80 0 0 1 415 160" fill="none" />
+        <path d="M 250 160 A 120 120 0 0 1 415 160" fill="none" />
+        <path d="M 250 160 A 160 160 0 0 1 415 160" fill="none" />
+      </g>
+    </g>
+
+    {/* Styled RS Arrow Monogram at the Bottom (Gradient Violet/Purple) */}
+    <g>
+      <path d="M 50 175 H 450 L 375 235 H 285 V 300 L 250 335 L 215 300 V 235 H 125 L 50 175 Z" fill="url(#logo-violet-gradient)" />
+      {/* Horizontal gap bar */}
+      <path d="M 215 200 H 285 V 215 H 215 V 200 Z" fill="#FFF" />
+      {/* Left inner triangle cutout */}
+      <path d="M 110 185 L 215 280 H 160 L 95 210 L 110 185 Z" fill="#FFF" />
+      {/* Right inner triangle cutout */}
+      <path d="M 390 185 L 285 280 H 340 L 405 210 L 390 185 Z" fill="#FFF" />
+    </g>
+
+    <defs>
+      <linearGradient id="logo-sun-gradient" x1="75" y1="160" x2="425" y2="160" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#EA580C" />
+        <stop offset="50%" stopColor="#F59E0B" />
+        <stop offset="100%" stopColor="#EA580C" />
+      </linearGradient>
+
+      <linearGradient id="logo-violet-gradient" x1="50" y1="250" x2="450" y2="250" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#1E1B4B" />
+        <stop offset="50%" stopColor="#6D28D9" />
+        <stop offset="100%" stopColor="#4338CA" />
+      </linearGradient>
+
+      <clipPath id="logo-semi-circle-clip">
+        <path d="M 85 160 A 165 165 0 0 1 415 160 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
 // Define the 1-5kW Solar packages database
 interface SolarPackage {
   id: string;
@@ -469,17 +554,17 @@ export default function RaimondSolarLandingPage() {
       <div className="bg-amber-500 text-slate-950 font-black text-center py-4 px-4 sm:py-5 sm:px-6 z-50 flex flex-col items-center justify-center gap-2 sm:gap-3 font-display relative shadow-md leading-normal w-full max-w-full overflow-hidden">
         <div className="flex items-center justify-center gap-2 sm:gap-2.5 flex-wrap w-full max-w-full">
           <Sun className="w-4.5 h-4.5 sm:w-5 sm:h-5 fill-slate-950 animate-pulse shrink-0" /> 
-          <span className="text-sm xs:text-base sm:text-lg md:text-xl font-extrabold tracking-wide uppercase text-slate-950 break-words text-center w-full max-w-full">RAIMOND SOLAR PVT LTD - AUTHORIZED SOLAR VENDOR & INTEGRATOR</span>
+          <span className="text-sm xs:text-base sm:text-lg md:text-xl font-extrabold tracking-wide uppercase text-slate-950 break-words text-center w-full max-w-full">RAIMOND SOLAR PVT LTD - ISO 9001:2015 CERTIFIED SOLAR VENDOR & INTEGRATOR</span>
         </div>
         <div className="text-sm md:text-base text-slate-900 font-bold max-w-4xl mx-auto leading-relaxed break-words w-full">
-          We assist in PM Surya Ghar National Portal Subsidy applications as a registered vendor. Raimond Solar is an Empaneled Vendor under National Portal for WBSEDCL & CESC consumers.
+          We assist in PM Surya Ghar National Portal Subsidy applications as a registered installer. Raimond Solar is a Registered Installer for WBSEDCL & CESC consumers under the PM Surya Ghar Yojana.
         </div>
       </div>
 
       {/* Modern Floating Header Bar */}
       <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md relative">
         <div className="max-w-7xl mx-auto py-3 px-2 sm:px-4 flex flex-row items-center justify-between w-full gap-1 sm:gap-4">
-          <Link href="/" className="shrink-0">
+          <Link href="/" className="shrink-0 flex items-center gap-2 sm:gap-2.5">
             <span className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold tracking-tight sm:tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display whitespace-nowrap">
               RAIMOND SOLAR PVT LTD
             </span>
@@ -940,7 +1025,7 @@ export default function RaimondSolarLandingPage() {
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                       </span>
                       <span className="text-[9px] sm:text-[10px] bg-emerald-50 border border-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-black uppercase tracking-widest font-display inline-block">
-                        Empaneled Vendor for WBSEDCL Consumers
+                        REGISTERED VENDOR FOR WBSEDCL CONSUMERS
                       </span>
                     </div>
                     <h3 className="text-2xl font-black text-slate-950 mt-1 tracking-tight font-display">Book Free Consultation</h3>
