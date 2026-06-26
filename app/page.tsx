@@ -176,7 +176,7 @@ const SOLAR_PACKAGES: SolarPackage[] = [
     monthlySavings: "₹2,898",
     yearlySavings: "₹34,776",
     spaceRequired: "১৮০ স্কয়ার ফিট (180 sqft)",
-    suitableFor: "Large Family, Water Pump & Multiple AC",
+    suitableFor: "Large Family, 1 AC & Regular Appliances",
     badge: "Most Popular",
   },
   {
@@ -551,14 +551,16 @@ export default function RaimondSolarLandingPage() {
       </noscript>
 
       {/* Top Banner indicating Government Scheme validation */}
-      <div className="bg-amber-500 text-slate-950 font-black text-center py-4 px-4 sm:py-5 sm:px-6 z-50 flex flex-col items-center justify-center gap-2 sm:gap-3 font-display relative shadow-md leading-normal w-full max-w-full overflow-hidden">
-        <div className="flex items-center justify-center gap-2 sm:gap-2.5 flex-wrap w-full max-w-full">
+      <div className="bg-amber-500 text-slate-950 font-black text-center py-3.5 px-4 sm:py-4 sm:px-6 z-50 flex flex-col items-center justify-center gap-1.5 sm:gap-2 font-display relative shadow-md leading-normal w-full max-w-full overflow-hidden">
+        <div className="flex items-center justify-center gap-2 flex-wrap w-full max-w-full">
           <Sun className="w-4.5 h-4.5 sm:w-5 sm:h-5 fill-slate-950 animate-pulse shrink-0" /> 
-          <span className="text-sm xs:text-base sm:text-lg md:text-xl font-extrabold tracking-wide uppercase text-slate-950 break-words text-center w-full max-w-full">RAIMOND SOLAR PVT LTD - ISO 9001:2015 CERTIFIED SOLAR VENDOR & INTEGRATOR</span>
+          <strong className="text-xs sm:text-sm md:text-base font-black tracking-wide uppercase text-slate-950 break-words text-center">
+            RAIMOND SOLAR PVT LTD - MSME & ISO 9001:2015 CERTIFIED SOLAR VENDOR & INTEGRATOR
+          </strong>
         </div>
-        <div className="text-sm md:text-base text-slate-900 font-bold max-w-4xl mx-auto leading-relaxed break-words w-full">
-          We assist in PM Surya Ghar National Portal Subsidy applications as a registered installer. Raimond Solar is a Registered Installer for WBSEDCL & CESC consumers under the PM Surya Ghar Yojana.
-        </div>
+        <p className="text-[10px] sm:text-xs text-slate-900 font-semibold max-w-4xl mx-auto leading-relaxed break-words text-center">
+          We assist in PM Surya Ghar National Portal Subsidy applications as a registered installer. Raimond Solar is an Empaneled/Registered Vendor for WBSEDCL & CESC consumers. We assist and guide consumers to apply for subsidy under the PM Surya Ghar National Portal.
+        </p>
       </div>
 
       {/* Modern Floating Header Bar */}
@@ -853,13 +855,13 @@ export default function RaimondSolarLandingPage() {
               <span className="block md:inline">সরকারি ভর্তুকির সুবিধায়</span>{" "}
               <span className="block md:inline">নিজের বাড়িতে সোলার বসান ও</span>{" "}
               <span className="block md:inline">
-                <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন
+                <span className="text-amber-500 underline decoration-amber-500 decoration-wavy decoration-1 underline-offset-4">বিদ্যুৎ বিল অনেকাংশে সাশ্রয়</span> করুন।
               </span>
             </h1>
  
             {/* Subheadline Details */}
             <p className="text-slate-100 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed drop-shadow-sm font-bold text-center lg:text-left mt-5 mb-5 md:mt-6">
-              পশ্চিমবঙ্গের সর্বাধিক নির্ভরযোগ্য সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/40 px-1 py-0.5 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
+              পশ্চিমবঙ্গের একটি MSME ও ISO সার্টিফাইড সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/40 px-1 py-0.5 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
             </p>
  
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl mx-auto lg:mx-0 text-left">
@@ -881,13 +883,13 @@ export default function RaimondSolarLandingPage() {
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-white">Net Metering Connection</h4>
-                  <p className="text-xs text-slate-400 mt-0.5">বিল দ্বিগুণ সাশ্রয় করতে অতিরিক্ত বিদ্যুৎ গ্রিডে ফেরত দিন</p>
+                  <p className="text-xs text-slate-400 mt-0.5">কার্যকরী বিল সাশ্রয় করতে অতিরিক্ত বিদ্যুৎ গ্রিডে ফেরত দিন</p>
                 </div>
               </div>
               <div className="flex items-start gap-2.5 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white">Up to ₹78,000 Estimated Subsidy Support</h4>
+                  <h4 className="text-sm font-bold text-white">Up to ₹78,000 Estimated Subsidy Support (Subject to Government Portal Approval)</h4>
                   <p className="text-xs text-slate-400 mt-0.5">সরকারি নির্দেশিকা অনুযায়ী সর্বোচ্চ অনুদানের আবেদন প্রক্রিয়াকরণে সম্পূর্ণ সহযোগিতা</p>
                 </div>
               </div>
@@ -917,7 +919,7 @@ export default function RaimondSolarLandingPage() {
             </div>
 
             {/* Core Metrics Summary */}
-            <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-slate-800/80">
+            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-slate-800/80">
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">1500+</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Successful Installs</div>
@@ -925,10 +927,6 @@ export default function RaimondSolarLandingPage() {
               <div>
                 <div className="text-xl sm:text-2xl font-black text-white font-display">18+ Years</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Industry Experience</div>
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">4.9 / 5</div>
-                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Client Rating</div>
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-black text-white font-display">ISO 9001</div>
@@ -1178,6 +1176,11 @@ export default function RaimondSolarLandingPage() {
                       )}
                     </button>
 
+                    {/* Consent line under submit button */}
+                    <p className="text-center text-[11px] text-slate-500 mt-2 leading-relaxed">
+                      ফর্ম জমা দিয়ে আপনি আমাদের Privacy Policy অনুযায়ী যোগাযোগের সম্মতি দিচ্ছেন।
+                    </p>
+
                     {/* Trust details */}
                     <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[10px] text-slate-500 font-bold">
                       <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
@@ -1192,6 +1195,13 @@ export default function RaimondSolarLandingPage() {
         </div>
       </section>
 
+      {/* Top Disclaimer Visibility Layer */}
+      <div className="bg-slate-50 border-b border-slate-200/80 py-4 px-4 sm:px-8 text-center text-[10px] sm:text-xs text-slate-500 leading-relaxed font-semibold">
+        <div className="max-w-7xl mx-auto">
+          <strong>Disclaimer:</strong> Raimond Solar Pvt Ltd is an independent, private solar energy engineering and installation company. We are a registered vendor for WBSEDCL & CESC consumers of West Bengal. Please note that we are NOT a government organization, nor are we the official website of the PM Surya Ghar Muft Bijli Yojana, WBSEDCL or CESC. Subsidies are subject to clearance and rules set by the Government of India and respective electricity boards.
+        </div>
+      </div>
+
       {/* SUBSIDY QUICK HIGHLIGHT GRID - Clean Material Gradient Card Section */}
       <section className="py-8 bg-gradient-to-b from-white to-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
@@ -1200,7 +1210,7 @@ export default function RaimondSolarLandingPage() {
               <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">1kWp Solar Unit</span>
               <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹30,000</div>
               <div className="text-[10px] sm:text-xs text-slate-600 bg-slate-50 py-1.5 rounded-xl border border-slate-100 font-bold leading-normal">
-                ক্যাবিনেট স্তরের অনুমোদিত ভর্তুকি
+                সরকারি নিয়মানুযায়ী নির্ধারিত ভর্তুকি
               </div>
             </div>
 
@@ -1208,27 +1218,29 @@ export default function RaimondSolarLandingPage() {
               <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">2kWp Solar Unit</span>
               <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹60,000</div>
               <div className="text-[10px] sm:text-xs text-slate-600 bg-slate-50 py-1.5 rounded-xl border border-slate-100 font-bold leading-normal">
-                রানিং কিস্তি ও ব্যাংক লোন উপলব্ধ
+                সরকারি নিয়মানুযায়ী নির্ধারিত ভর্তুকি
               </div>
             </div>
 
             <div className="bg-white border-2 border-amber-400 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-md bg-amber-50/20 transition-all duration-300 scale-102 sm:scale-105 hover:scale-[1.10] active:scale-95 hover:shadow-xl cursor-pointer">
               <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 text-[8px] sm:text-[9px] font-black px-1.5 sm:px-2 py-0.5 rounded-bl uppercase tracking-wide">
-                Best Benefit
+                Max Subsidy
               </div>
               <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase tracking-widest block font-display">3kWp - 10kWp Max</span>
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000</div>
+              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000*</div>
               <div className="text-[10px] sm:text-xs text-emerald-800 bg-emerald-50 py-1.5 rounded-xl border border-emerald-100 font-bold leading-normal">
-                সর্বাধিক সাশ্রয় ও দীর্ঘস্থায়ী বিদ্যুৎ উৎপাদন
+                উচ্চ সাশ্রয় ও দীর্ঘস্থায়ী বিদ্যুৎ উৎপাদন
               </div>
+              <p className="text-[9px] text-slate-400 font-normal mt-1 leading-none">*Subject to Portal Approval</p>
             </div>
 
             <div className="bg-white border border-slate-200 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.08] active:scale-95 hover:border-amber-400/50 cursor-pointer">
               <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">Above 10kWp</span>
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000</div>
+              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000*</div>
               <div className="text-[10px] sm:text-xs text-slate-600 bg-slate-50 py-1.5 rounded-xl border border-slate-100 font-bold leading-normal">
                 সর্বোচ্চ ক্যাটাগরি ফিক্সড সাবসিডি
               </div>
+              <p className="text-[9px] text-slate-400 font-normal mt-1 leading-none">*Subject to Portal Approval</p>
             </div>
           </div>
         </div>
@@ -1240,13 +1252,13 @@ export default function RaimondSolarLandingPage() {
           
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs text-sky-600 font-bold tracking-widest uppercase block mb-2 font-display">
-              No Hidden Charges • Complete Turnkey Delivery
+              No Hidden Charges • Hassle-Free Installation Support
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-950 font-display">
               Raimond Solar Subsidy Package Options
             </h2>
             <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
-              পশ্চিমবঙ্গ বিদ্যুৎ পর্ষদের (WBSEDCL) অধীনে সরকারি প্রজেক্টের ভর্তুকি ক্লেইম করার পর আপনার মোট খরচের নিখুঁত প্যাকেজ বিবরণ।
+              পশ্চিমবঙ্গ বিদ্যুৎ পর্ষদের (WBSEDCL) অধীনে সরকারি প্রজেক্টের ভর্তুকি ক্লেইম করার পর আপনার মোট খরচের একটি স্বচ্ছ ও আনুমানিক প্যাকেজ বিবরণ।
             </p>
           </div>
 
@@ -1267,7 +1279,7 @@ export default function RaimondSolarLandingPage() {
               {[
                 { size: "1kWp Solar System", bill: "₹500 - ₹1,000", bg: "from-amber-50/30 to-amber-100/10" },
                 { size: "2kWp Solar System", bill: "₹1,000 - ₹2,000", bg: "from-sky-50/30 to-sky-100/10" },
-                { size: "3kWp Solar System", bill: "₹2,000 - ₹3,000", bg: "from-emerald-50/30 to-emerald-100/10", tag: "Best Seller" },
+                { size: "3kWp Solar System", bill: "₹2,000 - ₹3,000", bg: "from-emerald-50/30 to-emerald-100/10", tag: "1500+ Installs" },
                 { size: "4kWp Solar System", bill: "₹3,000 - ₹4,000", bg: "from-teal-50/30 to-teal-100/10" },
                 { size: "5kWp Solar System", bill: "₹4,000 - ₹5,000", bg: "from-indigo-50/30 to-indigo-100/10" },
               ].map((item, index) => (
@@ -1310,7 +1322,7 @@ export default function RaimondSolarLandingPage() {
                 >
                   {isHighlyRecommended && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-sm font-display">
-                      <Award className="w-3.5 h-3.5 stroke-[2.5]" /> Highly Recommended • সবচেয়ে লাভজনক
+                      <Award className="w-3.5 h-3.5 stroke-[2.5]" /> Highly Recommended • জনপ্রিয় প্যাকেজ
                     </div>
                   )}
 
@@ -1329,9 +1341,14 @@ export default function RaimondSolarLandingPage() {
                         <span>Gross Install Price:</span>
                         <span className="font-mono text-slate-400 line-through">{pkg.grossPrice}</span>
                       </div>
-                      <div className="flex justify-between text-xs text-emerald-600 font-bold border-b border-slate-100/60 pb-1.5">
-                        <span>PM Surya Ghar Subsidy:</span>
-                        <span className="font-mono bg-emerald-100/60 px-2 py-0.5 rounded text-emerald-700">-{pkg.subsidy}</span>
+                      <div className="flex flex-col border-b border-slate-100/60 pb-1.5 gap-1">
+                        <div className="flex justify-between text-xs text-emerald-600 font-bold">
+                          <span>PM Surya Ghar Subsidy:</span>
+                          <span className="font-mono bg-emerald-100/60 px-2 py-0.5 rounded text-emerald-700">-{pkg.subsidy}</span>
+                        </div>
+                        <span className="text-[11px] text-slate-400 font-normal text-right leading-tight">
+                          Estimated subsidy, subject to MNRE National Portal approval.
+                        </span>
                       </div>
                       
                       <div className="mt-2.5 pt-2.5 flex flex-col gap-1">
@@ -1373,6 +1390,9 @@ export default function RaimondSolarLandingPage() {
                         <strong className="text-slate-900 font-mono">{pkg.spaceRequired}</strong>
                       </li>
                     </ul>
+                    <p className="text-[11px] text-slate-400 font-normal leading-normal border-t border-slate-100 pt-2.5 text-center">
+                      Generation and savings figures are estimates based on average sunlight conditions in West Bengal. Actual results may vary depending on roof direction, shading, and usage patterns.
+                    </p>
                   </div>
 
                   <div className="pt-6 mt-5 border-t border-slate-100">
@@ -1393,6 +1413,12 @@ export default function RaimondSolarLandingPage() {
               );
             })}
           </div>
+          
+          <div className="text-center mt-10">
+            <p className="text-[11px] sm:text-xs text-slate-400 font-semibold leading-relaxed">
+              *শর্তাবলী প্রযোজ্য এবং জিএসটি ও পর্ষদের নিয়ম অনুযায়ী মূল্য পরিবর্তন সাপেক্ষ।
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1408,7 +1434,7 @@ export default function RaimondSolarLandingPage() {
               Solar Savings & Grid Subsidy Calculator
             </h2>
             <p className="text-slate-600 text-sm mt-2 max-w-xl mx-auto font-medium">
-              আপনার সোলার প্ল্যান্টের সাইজ অনুযায়ী দেখে নিন কত টাকা সোজাসুজি সরকারি অনুদান পাবেন এবং এবং আগামী ২৫ বছরে কত টাকা সাশ্রয় হতে পারে।
+              আপনার সোলার প্ল্যান্টের সাইজ অনুযায়ী দেখে নিন কত টাকা সম্ভাব্য সরকারি অনুদান পাবেন এবং আগামী ২৫ বছরে কত টাকা আনুমানিক সাশ্রয় হতে পারে।
             </p>
           </div>
 
@@ -1528,6 +1554,9 @@ export default function RaimondSolarLandingPage() {
                   </div>
                 </div>
               </div>
+              <p className="text-[11px] text-slate-400 font-normal leading-normal mt-3 text-center">
+                Generation and savings figures are estimates based on average sunlight conditions in West Bengal. Actual results may vary depending on roof direction, shading, and usage patterns.
+              </p>
 
               <button
                 onClick={() => handleClaimCalculatorPkg(calcSelectedSize)}
@@ -1545,11 +1574,8 @@ export default function RaimondSolarLandingPage() {
       {/* WHY TRUST US SECTION */}
       <section className="py-16 md:py-24 px-4 sm:px-8 max-w-7xl mx-auto" id="on-grid">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
-            About Raimond Solar Pvt Ltd
-          </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 font-display">
-            Why West Bengal Trusts Raimond Solar Pvt Ltd
+            About Raimond Solar Pvt Ltd
           </h2>
           <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
             আমরা দীর্ঘ ১৮ বছর ধরে পশ্চিমবঙ্গে সোলার সংযোগ ও বিদ্যুৎ পরিকাঠামোয় কাজ করছি এবং ১৫০০ এর বেশি সফল সোলার সংযোগ কাস্টমার রয়েছে আমাদের।
@@ -1568,9 +1594,9 @@ export default function RaimondSolarLandingPage() {
 
           <div className="bg-white border border-slate-200 p-6 rounded-3xl relative overflow-hidden shadow-sm">
             <Zap className="w-10 h-10 text-amber-500 mb-4" />
-            <h3 className="text-lg font-bold text-slate-950 mb-2 font-display">Premium DCR Solar Panels</h3>
+            <h3 className="text-lg font-bold text-slate-950 mb-2 font-display">Premium DCR Monocrystalline Panels</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              সরকারি নির্দেশিকা মেনে আমরা শুধুমাত্র উচ্চ মানের ডমেস্টিক কনটেন্ট রিকোয়ারমেন্ট (DCR) এবং লেটেস্ট TOPCon / HJT সোলার মডিউল ব্যবহার করি দীর্ঘস্থায়ী বিদ্যুৎ উৎপাদনের নিশ্চয়তা দিতে।
+              সরকারি নির্দেশিকা মেনে আমরা শুধুমাত্র উচ্চ মানের ডমেস্টিক কনটেন্ট রিকোয়ারমেন্ট (DCR) এবং লেটেস্ট Monocrystalline সোলার মডিউল ব্যবহার করি, যা দীর্ঘস্থায়ী ও কার্যকরী বিদ্যুৎ উৎপাদনে সহায়ক।
             </p>
           </div>
 
@@ -1676,12 +1702,12 @@ export default function RaimondSolarLandingPage() {
             {
               id: "PqHhUsqRGSY",
               title: "Raimond Solar Guide - Important Setup Precautions",
-              desc: "Warning 🚨 সোলার লাগানোর আগে ৩টি অত্যন্ত জরুরি এবং আইনি পদ্ধতি অবশ্যই জেনে রাখুন।"
+              desc: "সোলার লাগানোর আগে ৩টি অত্যন্ত জরুরি এবং আইনি পদ্ধতি অবশ্যই জেনে রাখুন।"
             },
             {
               id: "BlV_DfqRtUo",
-              title: "Raimond Solar Guide - 90% Bill Reduction Strategy",
-              desc: "কিভাবে আপনার বাড়ীর ইলেকট্রিক বিল ৯০% পর্যন্ত কমাবেন? Raimond Solar দেবে তার সঠিক ও নির্ভরযোগ্য সমাধান।"
+              title: "Raimond Solar Guide - Bill Reduction Strategy",
+              desc: "কিভাবে আপনার বাড়ীর ইলেকট্রিক বিল উল্লেখযোগ্যভাবে কমাবেন? Raimond Solar দেবে তার সঠিক ও কার্যকরী সমাধান।"
             }
           ].map((vid) => (
             <div
@@ -1748,7 +1774,7 @@ export default function RaimondSolarLandingPage() {
             },
             {
               q: "How many electricity units does a 1kWp system generate daily on average?",
-              a: "Under West Bengal climate conditions, a highly optimized 1kWp solar plant generates an average of 4.6 units of clean green electricity daily (scaling up to approx 1,400+ units annually). Our certified TOPCon and HJT solar technologies maintain dependable production even during overcast or cloudy weather.",
+              a: "Under West Bengal climate conditions, a highly optimized 1kWp solar plant generates an average of 4.6 units of clean green electricity daily (scaling up to approx 1,400+ units annually). Our certified Monocrystalline solar technologies maintain dependable production even during overcast or cloudy weather.",
             },
           ].map((faq, idx) => (
             <div
@@ -2025,7 +2051,7 @@ export default function RaimondSolarLandingPage() {
               RAIMOND <span className="text-amber-500">SOLAR</span>
             </span>
             <p className="text-[11px] text-slate-600 leading-relaxed font-semibold">
-              র‍্যামন্ড সোলার প্রাইভেট লিমিটেড পশ্চিমবঙ্গের একটি তালিকাভুক্ত অগ্রণী সোলার এন্টারপ্রাইজ কোম্পানি। ছাদের অন-গ্রিড সংযোগ ও সরকারি ভর্তুকি রূপায়ণে আমরা নির্ভরযোগ্য অংশীদার।
+              র‍্যামন্ড সোলার প্রাইভেট লিমিটেড পশ্চিমবঙ্গের একটি তালিকাভুক্ত MSME সোলার এন্টারপ্রাইজ কোম্পানি। ছাদের অন-গ্রিড সংযোগ ও সরকারি ভর্তুকি রূপায়ণে আমরা আপনার সহযোগী।
             </p>
             <div className="text-[10px] text-sky-700 font-bold flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-sky-600" /> 
@@ -2089,10 +2115,9 @@ export default function RaimondSolarLandingPage() {
 
         <div className="max-w-7xl mx-auto border-t border-slate-200 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-semibold gap-4">
           <div>
-            © 2026 Raimond Solar Pvt Ltd. All Rights Reserved. Meta Pixel is fully configured on active nodes.
+            © 2026 Raimond Solar Pvt Ltd. All Rights Reserved.
           </div>
           <div className="flex flex-wrap gap-4 mt-2 sm:mt-0 text-slate-500 font-display font-bold">
-            <a href="/admin" className="hover:text-amber-600 hover:underline">Admin CRM Panel</a>
             <a href="/privacy-policy" className="hover:text-amber-600 hover:underline cursor-pointer">Privacy Policy</a>
             <a href="/terms-and-conditions" className="hover:text-amber-600 hover:underline cursor-pointer">Terms of Service</a>
           </div>
