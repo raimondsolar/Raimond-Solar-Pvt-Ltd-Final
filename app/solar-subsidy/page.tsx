@@ -951,18 +951,22 @@ export default function RaimondSolarLandingPage() {
             </div>
 
             {/* Core Metrics Summary */}
-            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-slate-800/80">
+            <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-slate-800/80">
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">1500+</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Successful Installs</div>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-black text-white font-display">18+ Years</div>
+                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">18+ Years</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Industry Experience</div>
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-black text-white font-display">ISO 9001</div>
+                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">ISO 9001</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Certified Co.</div>
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">MSME</div>
+                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Registered Enterprise</div>
               </div>
             </div>
           </div>
@@ -1758,6 +1762,9 @@ export default function RaimondSolarLandingPage() {
           <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
             আমরা দীর্ঘ ১৮ বছর ধরে পশ্চিমবঙ্গে সোলার সংযোগ ও বিদ্যুৎ পরিকাঠামোয় কাজ করছি এবং ১৫০০ এর বেশি সফল সোলার সংযোগ কাস্টমার রয়েছে আমাদের।
           </p>
+          <p className="text-slate-500 text-xs sm:text-sm mt-4 leading-relaxed font-medium max-w-3xl mx-auto border-t border-slate-100 pt-4">
+            Officially incorporated in 2021, Raimond Solar Pvt Ltd is an ISO 9001:2015 certified and MSME-approved organization. We are backed by a core founding team and engineers with over 18+ years of combined hands-on solar and electrical infrastructure experience since 2008. As a trusted leader in West Bengal, we deliver high-efficiency energy solutions for residential, commercial, and government projects.
+          </p>
         </div>
 
         {/* Bento Grid */}
@@ -2302,7 +2309,7 @@ export default function RaimondSolarLandingPage() {
         </div>
 
         <div className="max-w-7xl mx-auto mt-6 text-[10px] text-slate-400 leading-relaxed text-center border-t border-slate-200/50 pt-4">
-          Disclaimer: Raimond Solar Pvt Ltd is an independent, private solar energy engineering and installation company. We are a registered vendor for WBSEDCL & CESC consumers of West Bengal. Please note that we are NOT a government organization, nor are we the official website of the PM Surya Ghar Muft Bijli Yojana, WBSEDCL or CESC. Subsidies are subject to clearance and rules set by the Government of India and respective electricity boards.
+          Disclaimer: Raimond Solar Pvt Ltd is an independent, private company (not a government entity) and a registered solar vendor for WBSEDCL & CESC in West Bengal. Solar subsidies are subject to approval and clearance rules set by the official government portal.
         </div>
       </footer>
 
