@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
+import Image from "next/image";
 import {
   Phone,
   MessageSquare,
@@ -25,7 +26,11 @@ import {
   Bot,
   User,
   CheckCheck,
-  Menu
+  Menu,
+  Lightbulb,
+  Building2,
+  Droplets,
+  Tractor
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { trackEvent, initTracking } from "@/lib/tracking";
@@ -258,6 +263,17 @@ export default function RaimondSolarLandingPage() {
   // Solar Interactive Calculator State
   const [calcSelectedSize, setCalcSelectedSize] = useState<number>(3); // 1 to 5 kWp
   const [calcBill, setCalcBill] = useState<number>(2400); // Monthly bill input
+
+  // Non-subsidy solutions 3D Flip Card State
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const toggleFlip = (idx: number) => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
+      setFlippedCards(prev => ({
+        ...prev,
+        [idx]: !prev[idx]
+      }));
+    }
+  };
 
   const calculatedSubsidy = calcSelectedSize === 1 ? 30000 : calcSelectedSize === 2 ? 60000 : 78000;
   const calcBaseRates: Record<number, number> = { 1: 92000, 2: 144000, 3: 198000, 4: 266000, 5: 313000 };
@@ -1422,6 +1438,145 @@ export default function RaimondSolarLandingPage() {
         </div>
       </section>
 
+      {/* OTHER SOLAR SOLUTIONS (WITHOUT SUBSIDY) */}
+      <section className="py-16 md:py-24 px-4 sm:px-8 bg-slate-50 border-t border-b border-slate-200/85" id="non-subsidy-solutions">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-xs text-sky-600 font-bold uppercase tracking-widest block mb-2 font-display">
+              Other Solar Solutions — Without Subsidy
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 font-display">
+              অন্যান্য সোলার সমাধান (ভর্তুকি ছাড়া)
+            </h2>
+            <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
+              সরকারি ভর্তুকি ছাড়াও আমরা বিভিন্ন ধরনের সোলার প্রোডাক্ট ও প্রজেক্টে প্রয়োজনীয় সহায়তা প্রদান করি — বাড়ি, ব্যবসা ও কৃষিকাজের জন্য।
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                titleEn: "Solar Home Light (DC & AC System)",
+                titleBn: "সোলার হোম লাইট (DC ও AC সিস্টেম)",
+                icon: Lightbulb,
+                iconColor: "text-amber-500 bg-amber-50 border-amber-200",
+                image: "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/a-assa-2a-3-4a-deg-a-1assa-r-a-2a-3-4a-a-dc-a-ac-a-a-a-assa-assa-r-g2VRTAGFVS9mBv88.jpg",
+              },
+              {
+                titleEn: "Solar Street Light",
+                titleBn: "সোলার স্ট্রিট লাইট",
+                icon: Sun,
+                iconColor: "text-orange-500 bg-orange-50 border-orange-200",
+                image: "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/final-single-double-4nJRpNWUU4fG8kNt.jpg",
+              },
+              {
+                titleEn: "Solar High Mast Light",
+                titleBn: "সোলার হাই মাস্ট লাইট",
+                icon: Sparkles,
+                iconColor: "text-sky-500 bg-sky-50 border-sky-200",
+                image: "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/generated-image-1-R84y2DvVzERG6Dy9.png",
+              },
+              {
+                titleEn: "Solar Commercial & Government Projects",
+                titleBn: "সোলার অন-গ্রিড / অফ-গ্রিড কমার্শিয়াল ও সরকারি প্রজেক্ট",
+                icon: Building2,
+                iconColor: "text-indigo-500 bg-indigo-50 border-indigo-200",
+                image: "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/whatsapp-image-2024-09-19-at-5.16.46-pm-to1NmgxWZyykN6rV.jpeg",
+              },
+              {
+                titleEn: "Solar Drinking Water Project",
+                titleBn: "সোলার পানীয় জল প্রজেক্ট",
+                icon: Droplets,
+                iconColor: "text-blue-500 bg-blue-50 border-blue-200",
+                image: "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/high-mast-2-ZoHWD6ZfFSInPp8S.jpg",
+              },
+              {
+                titleEn: "Solar Agriculture Project (Solar Pump)",
+                titleBn: "সোলার কৃষি প্রজেক্ট (সোলার পাম্প)",
+                icon: Tractor,
+                iconColor: "text-emerald-500 bg-emerald-50 border-emerald-200",
+                image: "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/7868164-77oAgDC4kbQZnGmb.png",
+              },
+            ].map((item, idx) => {
+              const IconComp = item.icon;
+              return (
+                <div
+                  key={idx}
+                  className="perspective-1000 group w-full h-48 sm:h-44 cursor-pointer"
+                  onClick={() => toggleFlip(idx)}
+                >
+                  <div
+                    className={`relative w-full h-full preserve-3d transition-all duration-500 group-hover-flip ${
+                      flippedCards[idx] ? "rotate-y-180" : ""
+                    }`}
+                  >
+                    {/* FRONT FACE */}
+                    <div className="absolute inset-0 w-full h-full backface-hidden bg-white border border-slate-200/80 p-6 rounded-3xl shadow-sm flex items-start gap-4 hover:border-sky-300 transition-colors duration-300">
+                      <div className={`p-3 rounded-2xl border ${item.iconColor} shrink-0`}>
+                        <IconComp className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-400 font-mono uppercase tracking-wide">
+                          {item.titleEn}
+                        </h3>
+                        <p className="text-base font-black text-slate-900 mt-1.5 leading-snug">
+                          {item.titleBn}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* BACK FACE */}
+                    <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 rounded-3xl overflow-hidden shadow-md">
+                      <div className="relative w-full h-full bg-slate-950">
+                        <Image
+                          src={item.image}
+                          alt={item.titleEn}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover opacity-60"
+                          referrerPolicy="no-referrer"
+                        />
+                        {/* Soft dark gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/30" />
+                        
+                        {/* Back Content */}
+                        <div className="absolute inset-0 p-6 flex flex-col justify-end text-left z-10">
+                          <span className="text-[10px] text-amber-400 font-bold uppercase tracking-widest font-mono">
+                            {item.titleEn}
+                          </span>
+                          <h4 className="text-base font-black text-white mt-1 drop-shadow-md leading-snug font-display">
+                            {item.titleBn}
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="tel:9073059780"
+              className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-black text-sm px-8 py-4 rounded-2xl text-center shadow-lg shadow-red-600/20 hover:shadow-red-600/30 transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <Phone className="w-4 h-4 shrink-0" />
+              <span>Call Now: 9073059780</span>
+            </a>
+            <a
+              href="https://wa.me/919073059780?text=Hi%2C%20I%27m%20interested%20in%20your%20solar%20products%20(without%20subsidy)"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm px-8 py-4 rounded-2xl text-center shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <WhatsAppIcon className="w-4 h-4 shrink-0 fill-current" />
+              <span>Book Now • WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* SOLAR SAVINGS ROI CALCULATOR - Rendered on white gradient blocks */}
       <section className="py-16 md:py-24 px-4 sm:px-8 bg-gradient-to-b from-white to-slate-100 border-t border-slate-200/85" id="subsidy-calculator">
         <div className="max-w-5xl mx-auto">
@@ -1754,7 +1909,7 @@ export default function RaimondSolarLandingPage() {
           {[
             {
               q: "What is the PM Surya Ghar Yojana and who is eligible?",
-              a: "PM Surya Ghar Muft Bijli Yojana is a central government subsidy scheme for implementing solar panel systems on residential rooftops from 1kW up to 10kW and above. Residential homeowners who have high-sunlight, shadow-free roof space and a connection with utility providers (WBSEDCL or CESC) can easily claim this subsidy.",
+              a: "PM Surya Ghar Muft Bijli Yojana is a central government subsidy scheme for implementing solar panel systems on residential rooftops from 1kW up to 10kW. Subsidy is provided up to a maximum of ₹78,000 for capacities of 3kW and above (capped). Residential homeowners who have high-sunlight, shadow-free roof space and a connection with utility providers (WBSEDCL or CESC) can easily apply for this subsidy.",
             },
             {
               q: "What is the maximum government subsidy structure in West Bengal?",
