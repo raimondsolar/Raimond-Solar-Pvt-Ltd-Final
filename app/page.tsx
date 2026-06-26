@@ -1502,7 +1502,7 @@ export default function RaimondSolarLandingPage() {
               return (
                 <div
                   key={idx}
-                  className="perspective-1000 group w-full h-48 sm:h-44 cursor-pointer"
+                  className="perspective-1000 group w-full aspect-[5/4] sm:aspect-auto h-auto sm:h-44 cursor-pointer"
                   onClick={() => toggleFlip(idx)}
                 >
                   <div
@@ -1533,7 +1533,8 @@ export default function RaimondSolarLandingPage() {
                           alt={item.titleEn}
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
-                          className="object-cover opacity-60"
+                          className="object-cover opacity-[0.85]"
+                          style={{ imageRendering: "auto" }}
                           referrerPolicy="no-referrer"
                         />
                         {/* Soft dark gradient overlay */}
@@ -1541,10 +1542,16 @@ export default function RaimondSolarLandingPage() {
                         
                         {/* Back Content */}
                         <div className="absolute inset-0 p-6 flex flex-col justify-end text-left z-10">
-                          <span className="text-[10px] text-amber-400 font-bold uppercase tracking-widest font-mono">
+                          <span 
+                            className="text-[10px] text-amber-400 font-bold uppercase tracking-widest font-mono"
+                            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}
+                          >
                             {item.titleEn}
                           </span>
-                          <h4 className="text-base font-black text-white mt-1 drop-shadow-md leading-snug font-display">
+                          <h4 
+                            className="text-base font-black text-white mt-1 leading-snug font-display"
+                            style={{ textShadow: "0 2px 8px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.95)" }}
+                          >
                             {item.titleBn}
                           </h4>
                         </div>
