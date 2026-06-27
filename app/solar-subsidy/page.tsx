@@ -30,7 +30,11 @@ import {
   Lightbulb,
   Building2,
   Droplets,
-  Tractor
+  Tractor,
+  Check,
+  Facebook,
+  Instagram,
+  Youtube
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { trackEvent, initTracking } from "@/lib/tracking";
@@ -370,6 +374,38 @@ export default function RaimondSolarLandingPage() {
   // Modals for Privacy Policy & Terms of Service
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+
+  // Footer animation refs
+  const footerRef = useRef<HTMLElement>(null);
+  const glowOrangeRef = useRef<HTMLDivElement>(null);
+  const glowTealRef = useRef<HTMLDivElement>(null);
+
+  const handleFooterMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!footerRef.current || !glowOrangeRef.current || !glowTealRef.current) return;
+    
+    const rect = footerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Orange glow is top-right: x = rect.width, y = 0
+    const distOrange = Math.sqrt(Math.pow(x - rect.width, 2) + Math.pow(y - 0, 2));
+    // Teal glow is bottom-left: x = 0, y = rect.height
+    const distTeal = Math.sqrt(Math.pow(x - 0, 2) + Math.pow(y - rect.height, 2));
+
+    if (distOrange < distTeal) {
+      glowOrangeRef.current.classList.add("footer-glow-active");
+      glowTealRef.current.classList.remove("footer-glow-active");
+    } else {
+      glowTealRef.current.classList.add("footer-glow-active");
+      glowOrangeRef.current.classList.remove("footer-glow-active");
+    }
+  };
+
+  const handleFooterMouseLeave = () => {
+    if (!glowOrangeRef.current || !glowTealRef.current) return;
+    glowOrangeRef.current.classList.remove("footer-glow-active");
+    glowTealRef.current.classList.remove("footer-glow-active");
+  };
 
   // Init standard pixel tracker
   useEffect(() => {
@@ -1017,7 +1053,7 @@ export default function RaimondSolarLandingPage() {
             </div>
 
             {/* Core Metrics Summary */}
-            <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-slate-800/80">
+            <div className="pt-6 grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-slate-800/80">
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">500+</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Successful Solar Projects</div>
@@ -1025,7 +1061,7 @@ export default function RaimondSolarLandingPage() {
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">18+ Years</div>
-                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Industry Experience</div>
+                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Team Experience</div>
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">ISO 9001</div>
@@ -1034,6 +1070,10 @@ export default function RaimondSolarLandingPage() {
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">MSME</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Registered Enterprise</div>
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">25 Yr</div>
+                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Panel Performance Warranty</div>
               </div>
             </div>
           </div>
@@ -1449,7 +1489,7 @@ export default function RaimondSolarLandingPage() {
                       </div>
                       <div className="flex flex-col border-b border-slate-100/60 pb-1.5 gap-1">
                         <div className="flex justify-between text-xs text-emerald-600 font-bold">
-                          <span>PM Surya Ghar Subsidy:</span>
+                          <span>Estimated National Portal Subsidy:</span>
                           <span className="font-mono bg-emerald-100/60 px-2 py-0.5 rounded text-emerald-700">-{pkg.subsidy}</span>
                         </div>
                         <span className="text-[11px] text-slate-400 font-normal text-right leading-tight">
@@ -1470,6 +1510,9 @@ export default function RaimondSolarLandingPage() {
                             {pkg.netPrice}
                           </span>
                         </div>
+                        <p className="text-[9px] text-slate-500 mt-2 leading-snug">
+                          You pay the full Gross Install Price ({pkg.grossPrice}) at the time of installation. The Govt subsidy of {pkg.subsidy} is credited separately by the government to your bank account after net metering commissioning, as per official portal timelines.
+                        </p>
                       </div>
                     </div>
 
@@ -1786,6 +1829,9 @@ export default function RaimondSolarLandingPage() {
                 </span>
                 <p className="text-[9px] text-slate-400 mt-1 font-semibold leading-normal">
                   *This includes our complete package of standard panels, inverter kit, structure and earthing logic arrays.
+                </p>
+                <p className="text-[9px] text-slate-500 mt-2 font-medium leading-normal text-left sm:text-center border-t border-slate-200/50 pt-2">
+                  You pay the full Gross Install Price (₹{calculatedGross.toLocaleString("en-IN")}) at the time of installation. The Govt subsidy of ₹{calculatedSubsidy.toLocaleString("en-IN")} is credited separately by the government to your bank account after net metering commissioning, as per official portal timelines.
                 </p>
               </div>
 
@@ -2297,88 +2343,167 @@ export default function RaimondSolarLandingPage() {
       </div>
 
       {/* FOOTER */}
-      <footer className="border-t border-slate-200 bg-white text-slate-500 text-xs py-12 px-4 sm:px-8 relative z-10 font-sans pb-24 md:pb-12 text-left">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <footer 
+        ref={footerRef}
+        onMouseMove={handleFooterMouseMove}
+        onMouseLeave={handleFooterMouseLeave}
+        className="border-t border-white/5 py-16 px-4 sm:px-8 relative z-10 font-sans pb-28 md:pb-16 text-left overflow-hidden bg-[#0b0f1a]"
+      >
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes glowPulse {
+            0% { opacity: 0.12; transform: scale(1); }
+            50% { opacity: 0.22; transform: scale(1.25); }
+            100% { opacity: 0.12; transform: scale(1); }
+          }
+          .footer-glow {
+            transition: all 0.4s ease-out;
+            animation: glowPulse 6s ease-in-out infinite;
+          }
+          .footer-glow-delayed {
+            transition: all 0.4s ease-out;
+            animation: glowPulse 6s ease-in-out infinite;
+            animation-delay: 3s;
+          }
+          .footer-glow-active {
+            animation: none !important;
+            transform: scale(1.4) !important;
+            opacity: 0.3 !important;
+          }
+        `}} />
+
+        {/* Soft Ambient Glows */}
+        <div ref={glowOrangeRef} className="footer-glow absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div ref={glowTealRef} className="footer-glow-delayed absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 relative z-10">
           
-          {/* Brand Col */}
-          <div className="space-y-3">
-            <span className="text-lg font-black tracking-tight text-slate-950 font-display">
-              RAIMOND <span className="text-amber-500">SOLAR</span>
-            </span>
-            <p className="text-[11px] text-slate-600 leading-relaxed font-semibold">
+          {/* Column 1: Brand Block */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,130,31,0.3)]">
+                <Sun className="w-7 h-7 text-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-black tracking-tight text-white font-display leading-none">
+                  RAIMOND SOLAR
+                </span>
+                <span className="text-[10px] font-bold text-amber-500 tracking-widest uppercase mt-1">
+                  SOLAR EPC · WEST BENGAL
+                </span>
+              </div>
+            </div>
+            
+            <p className="text-[15px] text-slate-300 leading-relaxed font-semibold">
               র‍্যামন্ড সোলার প্রাইভেট লিমিটেড পশ্চিমবঙ্গের একটি তালিকাভুক্ত MSME সোলার এন্টারপ্রাইজ কোম্পানি। ছাদের অন-গ্রিড সংযোগ ও সরকারি ভর্তুকি রূপায়ণে আমরা আপনার সহযোগী।
             </p>
-            <div className="text-[10px] text-sky-700 font-bold flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-sky-600" /> 
+            <div className="text-sm text-emerald-400 font-bold flex items-center gap-1.5 pt-1">
+              <ShieldCheck className="w-5 h-5 text-emerald-400" /> 
               <span>ISO Certified Co.</span>
             </div>
           </div>
 
-          {/* Service Areas */}
+          {/* Column 2: Service Areas */}
           <div>
-            <h4 className="text-slate-900 font-black text-xs uppercase tracking-wider mb-3 font-display">Service Areas (পশ্চিমবঙ্গে আমাদের এলাকা)</h4>
-            <ul className="space-y-1.5 text-[11px] text-slate-600 font-semibold">
+            <h4 className="text-white font-black text-[17px] uppercase tracking-widest mb-6 font-display flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Service Areas
+            </h4>
+            <ul className="space-y-3 text-[15px] text-slate-300 font-semibold leading-relaxed">
               <li>• Kolkata (কলকাতা)</li>
               <li>• Howrah (হাওড়া)</li>
               <li>• Hooghly (হুগলী)</li>
               <li>• North 24 Parganas</li>
               <li>• South 24 Parganas</li>
-              <li className="text-amber-600">• All Districts (সমগ্র পশ্চিমবঙ্গ)</li>
+              <li className="text-amber-500">• All Districts (সমগ্র পশ্চিমবঙ্গ)</li>
             </ul>
           </div>
 
-          {/* Corporate Office Location */}
-          <div>
-            <h4 className="text-slate-900 font-black text-xs uppercase tracking-wider mb-3 font-display">Corporate Details</h4>
-            <p className="text-[11px] text-slate-600 leading-relaxed font-semibold">
+          {/* Column 3: Company */}
+          <div className="select-none" onContextMenu={(e) => e.preventDefault()}>
+            <h4 className="text-white font-black text-[17px] uppercase tracking-widest mb-6 font-display flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              Company
+            </h4>
+            
+            <p className="text-[15px] text-slate-300 leading-relaxed font-semibold mb-6">
               <strong>Raimond Solar Pvt Ltd</strong>
               <br />
               Sonarpur, Kolkata - 700150
               <br />
               West Bengal, India
             </p>
-            <a
-              href="https://maps.google.com/?cid=15167722827222380471"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sky-700 hover:underline text-[11px] font-bold mt-2.5"
-            >
-              <MapPin className="w-3.5 h-3.5 text-sky-600" /> View on Google Maps
-            </a>
-          </div>
 
-          {/* Helpline desk */}
-          <div>
-            <h4 className="text-slate-900 font-black text-xs uppercase tracking-wider mb-3 font-display">Official Connections</h4>
-            <ul className="space-y-2 text-[11px] text-slate-600 font-semibold">
-              <li>
-                Helpline Primary: <a href="tel:9073059780" className="text-slate-900 hover:text-rose-600 font-mono font-black">9073059780</a>
-              </li>
-              <li>
-                Helpline Office: <a href="tel:6289638649" className="text-slate-900 hover:text-rose-600 font-mono font-black">6289638649</a>
-              </li>
-              <li>
-                WhatsApp Chat: <a href="https://wa.me/919073059780" className="text-[#25D366] hover:underline font-mono font-bold">9073059780</a>
-              </li>
-              <li>
-                Email Desk: <a href="mailto:info@raimondsolar.in" className="text-slate-700 hover:underline">info@raimondsolar.in</a>
-              </li>
+            <ul className="space-y-3 text-[14px] text-slate-400 font-medium leading-relaxed">
+              <li><strong className="text-slate-200">GST Number:</strong> 19AAKCR7626Q1ZD</li>
+              <li><strong className="text-slate-200">CIN:</strong> U40106WB2021PTC242819</li>
+              <li><strong className="text-slate-200">MSME / UDYAM:</strong> UDYAM-WB-18-0032969</li>
+              <li><strong className="text-slate-200">ISO 9001:2015:</strong> Certificate No: 305023122208Q</li>
+              <li><strong className="text-slate-200">Office Hours:</strong> Mon–Sat: 10:00 AM – 7:00 PM | Sun: Closed</li>
+              <li><strong className="text-slate-200">Reg. Office:</strong> Susangini Apt, 2nd Fl, 267, A.P. Nagar, Sonarpur, Kolkata – 700150</li>
+              <li><strong className="text-slate-200">Official Email:</strong> <a href="mailto:raimondsolar83@gmail.com" className="hover:text-amber-500 transition-colors select-auto" onContextMenu={(e) => e.stopPropagation()}>raimondsolar83@gmail.com</a></li>
             </ul>
           </div>
 
-        </div>
-
-        <div className="max-w-7xl mx-auto border-t border-slate-200 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-semibold gap-4">
+          {/* Column 4: Official Connections & Map */}
           <div>
-            © 2026 Raimond Solar Pvt Ltd. All Rights Reserved.
+            <h4 className="text-white font-black text-[17px] uppercase tracking-widest mb-6 font-display flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Get in Touch
+            </h4>
+            <ul className="space-y-4 text-[15px] text-slate-300 font-semibold leading-relaxed mb-8">
+              <li>
+                Helpline Primary: <a href="tel:9073059780" className="text-white relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-amber-500 font-mono font-black hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">9073059780</a>
+              </li>
+              <li>
+                Helpline Office: <a href="tel:6289638649" className="text-white relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-amber-500 font-mono font-black hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">6289638649</a>
+              </li>
+              <li>
+                WhatsApp Chat: <a href="https://wa.me/919073059780" className="text-[#25D366] relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#25D366] after:transition-all after:duration-300 hover:after:w-full hover:text-[#25D366] font-mono font-bold hover:drop-shadow-[0_0_8px_rgba(37,211,102,0.5)] transition-colors">9073059780</a>
+              </li>
+              <li>
+                Email Desk: <a href="mailto:info@raimondsolar.in" className="text-slate-300 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-white transition-colors hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">info@raimondsolar.in</a>
+              </li>
+            </ul>
+
+            <div className="w-full h-48 rounded-xl overflow-hidden border border-white/10 shadow-lg relative select-auto" onContextMenu={(e) => e.stopPropagation()}>
+              <iframe
+                src="https://maps.google.com/maps?q=Susangini+Apartment,+2nd+Floor,+267,+A.P.+Nagar,+Sonarpur,+Kolkata,+West+Bengal,+India+–+700150&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                className="absolute inset-0 w-full h-full border-0"
+                allowFullScreen={false}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Raimond Solar Registered Office Map"
+              ></iframe>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-4 mt-2 sm:mt-0 text-slate-500 font-display font-bold">
-            <a href="/privacy-policy" className="hover:text-amber-600 hover:underline cursor-pointer">Privacy Policy</a>
-            <a href="/terms-and-conditions" className="hover:text-amber-600 hover:underline cursor-pointer">Terms of Service</a>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="max-w-7xl mx-auto border-t border-white/10 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+          <div className="text-[14px] text-slate-400 font-semibold order-2 sm:order-1 text-center sm:text-left">
+            © 2026 Raimond Solar Pvt Ltd. All Rights Reserved.
+            <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-3 text-slate-300 font-display font-bold">
+              <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-amber-500 hover:underline cursor-pointer transition-colors">Privacy Policy</button>
+              <button onClick={() => setIsTermsOpen(true)} className="hover:text-amber-500 hover:underline cursor-pointer transition-colors">Terms of Service</button>
+            </div>
+          </div>
+          
+          <div className="flex gap-4 order-1 sm:order-2 select-auto" onContextMenu={(e) => e.stopPropagation()}>
+            <a href="https://www.facebook.com/Raimondsolar.Official/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 shadow-sm text-slate-300 hover:bg-[#1877F2] hover:border-[#1877F2] hover:text-white rounded-full transition-all duration-300 hover:scale-[1.15] hover:shadow-[0_0_16px_rgba(24,119,242,0.6)] active:scale-[1.15]">
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a href="https://www.instagram.com/raimondsolar_official/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 shadow-sm text-slate-300 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:border-transparent hover:text-white rounded-full transition-all duration-300 hover:scale-[1.15] hover:shadow-[0_0_16px_rgba(220,39,67,0.6)] active:scale-[1.15]">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href="https://www.youtube.com/@raimondsolar832" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 shadow-sm text-slate-300 hover:bg-[#FF0000] hover:border-[#FF0000] hover:text-white rounded-full transition-all duration-300 hover:scale-[1.15] hover:shadow-[0_0_16px_rgba(255,0,0,0.6)] active:scale-[1.15]">
+              <Youtube className="w-5 h-5" />
+            </a>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto mt-6 text-[10px] text-slate-400 leading-relaxed text-center border-t border-slate-200/50 pt-4">
+        {/* Disclaimer */}
+        <div className="max-w-7xl mx-auto mt-8 text-[12px] text-slate-500 leading-relaxed text-center relative z-10">
           Disclaimer: Raimond Solar Pvt Ltd is an independent, private company (not a government entity) and a registered solar vendor for WBSEDCL & CESC in West Bengal. Solar subsidies are subject to approval and clearance rules set by the official government portal.
         </div>
       </footer>
