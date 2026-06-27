@@ -237,6 +237,72 @@ const WB_DISTRICTS = [
   "Cooch Behar",
 ];
 
+const HoverCard = ({ 
+  title, 
+  price, 
+  badge, 
+  subtitle, 
+  isMax = false 
+}: { 
+  title: string, 
+  price: string, 
+  badge: string, 
+  subtitle: string,
+  isMax?: boolean
+}) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`bg-white p-4 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-95 cursor-pointer flex flex-col items-center justify-center h-full ${
+        isMax ? "border-2 border-amber-400 bg-amber-50/10 shadow-md" : "border border-slate-200"
+      }`}
+    >
+      {/* Radial Glow Effect */}
+      <div
+        className="pointer-events-none absolute inset-0 transition-opacity duration-300"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          background: `radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px, ${
+            isMax ? "rgba(251, 191, 36, 0.2)" : "rgba(250, 204, 21, 0.15)"
+          }, transparent 40%)`,
+        }}
+      />
+
+      {isMax && (
+        <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 text-[9px] sm:text-[10px] font-black px-2 sm:px-3 py-1 rounded-bl-lg uppercase tracking-wide z-10 shadow-sm">
+          MAX SUBSIDY
+        </div>
+      )}
+      
+      <div className="relative z-10 w-full flex flex-col items-center">
+        <span className="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display mb-1">{title}</span>
+        <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 font-mono drop-shadow-sm">{price}</div>
+        <div className="text-[10px] sm:text-[11px] text-slate-600 bg-slate-50 py-1.5 px-3 rounded-xl border border-slate-200 font-bold leading-normal mb-2 shadow-sm w-full">
+          {badge}
+        </div>
+        <p className="text-[9px] text-slate-400 font-normal leading-none">{subtitle}</p>
+      </div>
+    </div>
+  );
+};
+
 export default function RaimondSolarLandingPage() {
   const router = useRouter();
 
@@ -953,8 +1019,9 @@ export default function RaimondSolarLandingPage() {
             {/* Core Metrics Summary */}
             <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-slate-800/80">
               <div>
-                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">1500+</div>
-                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Successful Installs</div>
+                <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">500+</div>
+                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Successful Solar Projects</div>
+                <div className="text-[8px] text-slate-400/85 mt-1 leading-tight font-medium">Verified project records available on request.</div>
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">18+ Years</div>
@@ -1234,50 +1301,53 @@ export default function RaimondSolarLandingPage() {
       {/* Top Disclaimer Visibility Layer */}
       <div className="bg-slate-50 border-b border-slate-200/80 py-4 px-4 sm:px-8 text-center text-[10px] sm:text-xs text-slate-500 leading-relaxed font-semibold">
         <div className="max-w-7xl mx-auto">
-          <strong>Disclaimer:</strong> Raimond Solar Pvt Ltd is an independent, private solar energy engineering and installation company. We are a registered vendor for WBSEDCL & CESC consumers of West Bengal. Please note that we are NOT a government organization, nor are we the official website of the PM Surya Ghar Muft Bijli Yojana, WBSEDCL or CESC. Subsidies are subject to clearance and rules set by the Government of India and respective electricity boards.
+          ⚠️ We are an independent, private solar installation company — NOT a government body or the official PM Surya Ghar portal.
         </div>
       </div>
 
       {/* SUBSIDY QUICK HIGHLIGHT GRID - Clean Material Gradient Card Section */}
-      <section className="py-8 bg-gradient-to-b from-white to-slate-50 border-b border-slate-200">
+      <section className="py-12 bg-gradient-to-b from-white to-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-            <div className="bg-white border border-slate-200 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.08] active:scale-95 hover:border-amber-400/50 cursor-pointer">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">1kWp Solar Unit</span>
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹30,000</div>
-              <div className="text-[10px] sm:text-xs text-slate-600 bg-slate-50 py-1.5 rounded-xl border border-slate-100 font-bold leading-normal">
-                সরকারি নিয়মানুযায়ী নির্ধারিত ভর্তুকি
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.08] active:scale-95 hover:border-amber-400/50 cursor-pointer">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">2kWp Solar Unit</span>
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹60,000</div>
-              <div className="text-[10px] sm:text-xs text-slate-600 bg-slate-50 py-1.5 rounded-xl border border-slate-100 font-bold leading-normal">
-                সরকারি নিয়মানুযায়ী নির্ধারিত ভর্তুকি
-              </div>
-            </div>
-
-            <div className="bg-white border-2 border-amber-400 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-md bg-amber-50/20 transition-all duration-300 scale-102 sm:scale-105 hover:scale-[1.10] active:scale-95 hover:shadow-xl cursor-pointer">
-              <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 text-[8px] sm:text-[9px] font-black px-1.5 sm:px-2 py-0.5 rounded-bl uppercase tracking-wide">
-                Max Subsidy
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase tracking-widest block font-display">3kWp - 10kWp Max</span>
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000*</div>
-              <div className="text-[10px] sm:text-xs text-emerald-800 bg-emerald-50 py-1.5 rounded-xl border border-emerald-100 font-bold leading-normal">
-                উচ্চ সাশ্রয় ও দীর্ঘস্থায়ী বিদ্যুৎ উৎপাদন
-              </div>
-              <p className="text-[9px] text-slate-400 font-normal mt-1 leading-none">*Subject to Portal Approval</p>
-            </div>
-
-            <div className="bg-white border border-slate-200 p-3.5 sm:p-5 rounded-3xl relative overflow-hidden text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.08] active:scale-95 hover:border-amber-400/50 cursor-pointer">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest block font-display">Above 10kWp</span>
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 my-1.5 sm:my-2 font-mono">₹78,000*</div>
-              <div className="text-[10px] sm:text-xs text-slate-600 bg-slate-50 py-1.5 rounded-xl border border-slate-100 font-bold leading-normal">
-                সর্বোচ্চ ক্যাটাগরি ফিক্সড সাবসিডি
-              </div>
-              <p className="text-[9px] text-slate-400 font-normal mt-1 leading-none">*Subject to Portal Approval</p>
-            </div>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display mb-3">
+              PM Surya Ghar Subsidy Slabs
+            </h2>
+            <p className="text-slate-500 text-sm font-medium">
+              Estimated capacity based on your current electricity bills. Subsidy amounts are subject to PM Surya Ghar guidelines.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+            <HoverCard
+              title="1KWP SOLAR UNIT"
+              price="₹30,000*"
+              badge="সরাসরি নিয়মানুযায়ী নির্ধারিত ভর্তুকি"
+              subtitle="*Subject to Portal Approval"
+            />
+            <HoverCard
+              title="2KWP SOLAR UNIT"
+              price="₹60,000*"
+              badge="সরাসরি নিয়মানুযায়ী নির্ধারিত ভর্তুকি"
+              subtitle="*Subject to Portal Approval"
+            />
+            <HoverCard
+              title="3KWP SOLAR UNIT"
+              price="₹78,000*"
+              badge="সরাসরি নিয়মানুযায়ী নির্ধারিত ভর্তুকি"
+              subtitle="*Subject to Portal Approval"
+              isMax={true}
+            />
+            <HoverCard
+              title="4KWP SOLAR UNIT"
+              price="₹78,000*"
+              badge="সরাসরি নিয়মানুযায়ী নির্ধারিত ভর্তুকি"
+              subtitle="*Subject to Portal Approval"
+            />
+            <HoverCard
+              title="5KWP SOLAR UNIT"
+              price="₹78,000*"
+              badge="সরাসরি নিয়মানুযায়ী নির্ধারিত ভর্তুকি"
+              subtitle="*Subject to Portal Approval"
+            />
           </div>
         </div>
       </section>
@@ -1315,7 +1385,7 @@ export default function RaimondSolarLandingPage() {
               {[
                 { size: "1kWp Solar System", bill: "₹500 - ₹1,000", bg: "from-amber-50/30 to-amber-100/10" },
                 { size: "2kWp Solar System", bill: "₹1,000 - ₹2,000", bg: "from-sky-50/30 to-sky-100/10" },
-                { size: "3kWp Solar System", bill: "₹2,000 - ₹3,000", bg: "from-emerald-50/30 to-emerald-100/10", tag: "1500+ Installs" },
+                { size: "3kWp Solar System", bill: "₹2,000 - ₹3,000", bg: "from-emerald-50/30 to-emerald-100/10", tag: "500+ Projects" },
                 { size: "4kWp Solar System", bill: "₹3,000 - ₹4,000", bg: "from-teal-50/30 to-teal-100/10" },
                 { size: "5kWp Solar System", bill: "₹4,000 - ₹5,000", bg: "from-indigo-50/30 to-indigo-100/10" },
               ].map((item, index) => (
@@ -1760,7 +1830,7 @@ export default function RaimondSolarLandingPage() {
             About Raimond Solar Pvt Ltd
           </h2>
           <p className="text-slate-600 text-sm mt-3 leading-relaxed font-semibold">
-            আমরা দীর্ঘ ১৮ বছর ধরে পশ্চিমবঙ্গে সোলার সংযোগ ও বিদ্যুৎ পরিকাঠামোয় কাজ করছি এবং ১৫০০ এর বেশি সফল সোলার সংযোগ কাস্টমার রয়েছে আমাদের।
+            আমরা দীর্ঘ ১৮ বছর ধরে পশ্চিমবঙ্গে সোলার সংযোগ ও বিদ্যুৎ পরিকাঠামোয় কাজ করছি এবং ৫০০ এর বেশি সফল সোলার সংযোগ কাস্টমার রয়েছে আমাদের।
           </p>
           <p className="text-slate-500 text-xs sm:text-sm mt-4 leading-relaxed font-medium max-w-3xl mx-auto border-t border-slate-100 pt-4">
             Officially incorporated in 2021, Raimond Solar Pvt Ltd is an ISO 9001:2015 certified and MSME-approved organization. We are backed by a core founding team and engineers with over 18+ years of combined hands-on solar and electrical infrastructure experience since 2008. As a trusted leader in West Bengal, we deliver high-efficiency energy solutions for residential, commercial, and government projects.
