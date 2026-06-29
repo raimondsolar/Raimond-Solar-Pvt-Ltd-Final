@@ -7,7 +7,6 @@ import Script from "next/script";
 import Image from "next/image";
 import {
   Phone,
-  MessageSquare,
   Sun,
   ShieldCheck,
   Star,
@@ -34,7 +33,8 @@ import {
   Check,
   Facebook,
   Instagram,
-  Youtube
+  Youtube,
+  IndianRupee
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { trackEvent, initTracking } from "@/lib/tracking";
@@ -307,6 +307,109 @@ const HoverCard = ({
   );
 };
 
+const heroImages = [
+  "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/new-solar-11-ECS58Vt6QfPdcJHe.jpg",
+  "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/new-solar-22-RAtXp3Ako7Dk9bhu.jpg",
+  "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/new-solar-33-LqPKB9IG65GtP9jQ.jpg",
+  "https://assets.zyrosite.com/pdf53TOKTfqD9wIN/solar-new-44-DK6re7Pb37bkzisV.jpg"
+];
+
+function HeroSlideshow() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
+
+  useEffect(() => {
+    // Check prefers-reduced-motion
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    
+    // Set initial value without triggering re-render if it matches initial state, or just ignore since we shouldn't setState in effect synchronously
+    // setIsReducedMotion(mediaQuery.matches); 
+    if (mediaQuery.matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsReducedMotion(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
+      <AnimatePresence>
+        <motion.img
+          key={currentIndex}
+          src={heroImages[currentIndex]}
+          alt="Solar Installation Work"
+          initial={{ opacity: 0, scale: 1 }}
+          animate={{ opacity: 1, scale: isReducedMotion ? 1 : 1.1 }}
+          exit={{ opacity: 0, scale: isReducedMotion ? 1 : 1.15 }}
+          transition={{
+            opacity: { duration: 1 },
+            scale: { duration: isReducedMotion ? 0 : 6, ease: "linear" }
+          }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-slate-950/60 lg:bg-gradient-to-r lg:from-slate-950/90 lg:via-slate-950/70 lg:to-slate-900/40 pointer-events-none z-10" />
+    </div>
+  );
+}
+
+
+// Global AudioContext for playing success chime
+let globalAudioCtx: AudioContext | null = null;
+
+function playSuccessChime() {
+  try {
+    if (!globalAudioCtx) return;
+    const now = globalAudioCtx.currentTime;
+    console.log("Playing success chime...");
+    
+    const playNote = (frequency: number, startTime: number, duration: number) => {
+      const oscillator = globalAudioCtx!.createOscillator();
+      const gainNode = globalAudioCtx!.createGain();
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      
+      gainNode.gain.setValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(0.15, startTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(globalAudioCtx!.destination);
+      
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration);
+    };
+
+    playNote(523.25, now, 0.4);       // C5
+    playNote(659.25, now + 0.15, 0.4); // E5
+    playNote(783.99, now + 0.3, 0.6);  // G5
+  } catch (e) {
+    console.warn("Failed to play success chime", e);
+  }
+}
+
+function initAndResumeAudioContext() {
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioContextClass) {
+      if (!globalAudioCtx) {
+        globalAudioCtx = new AudioContextClass();
+      }
+      if (globalAudioCtx.state === 'suspended') {
+        globalAudioCtx.resume();
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to init audio context", e);
+  }
+}
+
 export default function RaimondSolarLandingPage() {
   const router = useRouter();
 
@@ -320,7 +423,7 @@ export default function RaimondSolarLandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Form lead submission states (Integrating working PM Surya Ghar Lead Form state)
+  // Form lead submission states (Integrating working Government Subsidy Lead Form state)
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [district, setDistrict] = useState("Kolkata");
@@ -329,6 +432,17 @@ export default function RaimondSolarLandingPage() {
   const [submittingLead, setSubmittingLead] = useState(false);
   const [formErr, setFormErr] = useState("");
   const [leadSubmitted, setLeadSubmitted] = useState(false);
+
+  // Popup Modal Form State
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupFullName, setPopupFullName] = useState("");
+  const [popupPhone, setPopupPhone] = useState("");
+  const [popupDistrict, setPopupDistrict] = useState("Kolkata");
+  const [popupMonthlyBill, setPopupMonthlyBill] = useState("₹1000-2000");
+  const [popupPreferredSystem, setPopupPreferredSystem] = useState("3kWp");
+  const [submittingPopupLead, setSubmittingPopupLead] = useState(false);
+  const [popupLeadSubmitted, setPopupLeadSubmitted] = useState(false);
+  const [popupFormErr, setPopupFormErr] = useState("");
 
   // Solar Interactive Calculator State
   const [calcSelectedSize, setCalcSelectedSize] = useState<number>(3); // 1 to 5 kWp
@@ -359,7 +473,7 @@ export default function RaimondSolarLandingPage() {
   const [chatMessages, setChatMessages] = useState<Array<{ role: "user" | "assistant"; text: string }>>([
     {
       role: "assistant",
-      text: "নমস্কার! আমি Raimond Solar Expert AI। PM Surya Ghar মুফ্ত বিজলি যোজনার সরকারি ভর্তুকি বা আপনার বাড়ির সোলার বসানোর খরচ জানতে আমাকে জিজ্ঞাসা করতে পারেন। আপনার নাম, ফোন নম্বর ও জেলা জানান, আমাদের টিম সরাসরি সহযোগিতা করবে।",
+      text: "নমস্কার! আমি Raimond Solar Expert AI। সরকারি ভর্তুকি স্কিম বা আপনার বাড়ির সোলার বসানোর খরচ জানতে আমাকে জিজ্ঞাসা করতে পারেন। আপনার নাম, ফোন নম্বর ও জেলা জানান, আমাদের টিম সরাসরি সহযোগিতা করবে।",
     },
   ]);
   const [userChatInput, setUserChatInput] = useState("");
@@ -407,6 +521,25 @@ export default function RaimondSolarLandingPage() {
     glowTealRef.current.classList.remove("footer-glow-active");
   };
 
+  // Close popup on Escape key and handle scroll lock
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isPopupOpen) {
+        setIsPopupOpen(false);
+      }
+    };
+    if (isPopupOpen) {
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isPopupOpen]);
+
   // Init standard pixel tracker
   useEffect(() => {
     initTracking();
@@ -448,6 +581,7 @@ export default function RaimondSolarLandingPage() {
   const handleLeadFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormErr("");
+    initAndResumeAudioContext();
     
     // Validate phone number (10 digits)
     const cleanedPhone = phone.replace(/[^0-9]/g, "");
@@ -481,14 +615,18 @@ export default function RaimondSolarLandingPage() {
 
     try {
       // 1. Submit directly to Google Apps Script Web App using no-cors mode
-      await fetch(webhookUrl, {
-        method: 'POST',
-        mode: 'no-cors', // অত্যন্ত জরুরি গুগল স্ক্রিপ্টের রিডাইরেকশন হ্যান্ডেল করার জন্য
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(leadData)
-      });
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors', // অত্যন্ত জরুরি গুগল স্ক্রিপ্টের রিডাইরেকশন হ্যান্ডেল করার জন্য
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(leadData)
+        });
+      } catch (scriptErr) {
+        console.warn("Failed to submit to Google Apps Script:", scriptErr);
+      }
 
       // 2. Submit to local Express/Next API so the lead resides in the admin list
       try {
@@ -509,19 +647,112 @@ export default function RaimondSolarLandingPage() {
         console.warn("Failed to copy lead to local admin store:", localErr);
       }
 
-      // Success alerts and clear inputs
-      alert('ধন্যবাদ! আপনার লিডটি সফলভাবে Raimond Solar সিস্টেমে জমা হয়েছে।');
+      // Redirect to thank you page
       setFullName("");
       setPhone("");
       setDistrict("Kolkata");
       setMonthlyBill("₹1000-2000");
-      setLeadSubmitted(true);
       trackEvent("Form Submission", { status: "Success", location: district });
+      playSuccessChime();
+      router.push("/thank-you");
     } catch (error) {
       console.error('Error submitting form:', error);
       setFormErr('দুঃখিত, কোনো একটি সমস্যা হয়েছে! দয়া করে আবার চেষ্টা করুন।');
     } finally {
       setSubmittingLead(false);
+    }
+  };
+
+  const handlePopupFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPopupFormErr("");
+    initAndResumeAudioContext();
+    
+    // Validate phone number (10 digits)
+    const cleanedPhone = popupPhone.replace(/[^0-9]/g, "");
+    if (cleanedPhone.length !== 10) {
+      setPopupFormErr("দয়া করে ১০ ডিজিটের সঠিক নম্বর দিন (যেমন: 9876543210)।");
+      return;
+    }
+
+    setSubmittingPopupLead(true);
+    trackEvent("Form Submission", {
+      candidateName: popupFullName,
+      candidateLocation: popupDistrict,
+      formContext: "Popup Modal"
+    });
+
+    const leadData = {
+      name: popupFullName.trim(),
+      phone: cleanedPhone.trim(),
+      location: popupDistrict.trim(),
+      monthlyBill: popupMonthlyBill,
+      preferredSystem: popupPreferredSystem,
+      systemSize: popupPreferredSystem,
+      system_size: popupPreferredSystem,
+      preferred_system: popupPreferredSystem,
+      system: popupPreferredSystem,
+      size: popupPreferredSystem,
+      systemsize: popupPreferredSystem,
+      preferredsystem: popupPreferredSystem,
+    };
+
+    const webhookUrl = 'https://script.google.com/macros/s/AKfycbwVmh1IexoJTaVNJDYbJRu16klHeQj4lXUyJZ96foOE1czKjZrYPSWP-_PaELxtogJK/exec'; 
+
+    try {
+      // 1. Submit directly to Google Apps Script Web App using no-cors mode
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(leadData)
+        });
+      } catch (scriptErr) {
+        console.warn("Failed to submit to Google Apps Script:", scriptErr);
+      }
+
+      // 2. Submit to local Express/Next API so the lead resides in the admin list
+      try {
+        await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName: popupFullName.trim(),
+            phone: cleanedPhone.trim(),
+            district: popupDistrict.trim(),
+            monthlyBill: popupMonthlyBill,
+            preferredSystem: popupPreferredSystem || "3kWp",
+            source: "popup_form",
+            notes: "Direct Google Apps Script Web App Popup Form Submission"
+          }),
+        });
+      } catch (localErr) {
+        console.warn("Failed to copy lead to local admin store:", localErr);
+      }
+
+      // Redirect to thank you page
+      trackEvent("Form Submission", { status: "Success", location: popupDistrict, formContext: "Popup Modal" });
+      
+      setIsPopupOpen(false);
+      
+      // Reset form
+      setPopupFullName("");
+      setPopupPhone("");
+      setPopupDistrict("Kolkata");
+      setPopupMonthlyBill("₹1000-2000");
+      setPopupPreferredSystem("3kWp");
+
+      playSuccessChime();
+      router.push("/thank-you");
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setPopupFormErr('দুঃখিত, কোনো একটি সমস্যা হয়েছে! দয়া করে আবার চেষ্টা করুন।');
+    } finally {
+      setSubmittingPopupLead(false);
     }
   };
 
@@ -550,7 +781,7 @@ export default function RaimondSolarLandingPage() {
       }
 
       if (norm.includes("subsidy") || norm.includes("ভর্তুকি") || norm.includes("যোজনা") || norm.includes("scheme") || norm.includes("সরকার")) {
-        return `পশ্চিমবঙ্গ বিদ্যুৎ পর্ষদের (WBSEDCL) অধীনে কেন্দ্র সরকারের PM Surya Ghar Muft Bijli Yojana-য় সোলার ইনস্টলেশনে আকর্ষণীয় সরকারি ভর্তুকি দেওয়া হচ্ছে:\n\n📌 **১ কিলোওয়াট সোলারে**: ₹৩০,০০০ ভর্তুকি\n📌 **২ কিলোওয়াট সোলারে**: ₹৬০,০০০ ভর্তুকি\n📌 **৩ কিলোওয়াট বা তার বেশির জন্য**: ₹৭৮,০০০ (সর্বোচ্চ ভর্তুকি)\n\nআমরা Raimond Solar সম্পূর্ণ কোটেশন, সরকারি আবেদন প্রক্রিয়া ও নেট মিটারিং একদম অ্যান্ড-টু-অ্যান্ড সমাধান করে দিই। আজই সোলার বুক করতে আপনার সম্পূর্ণ নাম ও মোবাইল নম্বর এখানে মেসেজ করুন।`;
+        return `পশ্চিমবঙ্গ বিদ্যুৎ পর্ষদের (WBSEDCL) অধীনে সরকারি ভর্তুকি স্কিমে সোলার ইনস্টলেশনে আকর্ষণীয় ভর্তুকি দেওয়া হচ্ছে:\n\n📌 **১ কিলোওয়াট সোলারে**: ₹৩০,০০০ ভর্তুকি\n📌 **২ কিলোওয়াট সোলারে**: ₹৬০,০০০ ভর্তুকি\n📌 **৩ কিলোওয়াট বা তার বেশির জন্য**: ₹৭৮,০০০ (সর্বোচ্চ ভর্তুকি)\n\nআমরা Raimond Solar সম্পূর্ণ কোটেশন, সরকারি আবেদন প্রক্রিয়া ও নেট মিটারিং একদম অ্যান্ড-টু-অ্যান্ড সমাধান করে দিই। আজই সোলার বুক করতে আপনার সম্পূর্ণ নাম ও মোবাইল নম্বর এখানে মেসেজ করুন।`;
       }
 
       if (norm.includes("address") || norm.includes("ঠিকানা") || norm.includes("কোথায়") || norm.includes("office") || norm.includes("অফিস") || norm.includes("location") || norm.includes("kolkata")) {
@@ -558,7 +789,7 @@ export default function RaimondSolarLandingPage() {
       }
 
       if (norm.includes("phone") || norm.includes("call") || norm.includes("যোগাযোগ") || norm.includes("নম্বর") || norm.includes("ফোন") || norm.includes("contact") || norm.includes("whatsapp") || norm.includes("হোয়াটসঅ্যাপ") || norm.includes("কথা")) {
-        return `আপনি আমাদের সাথে সরাসরি কথা বলতে পারেন বা হোয়াটসঅ্যাপে মেসেজ পাঠাতে পারেন:\n📞 **৯০৭৩০৫৯৭৮০** (প্রধান হেল্পলাইন)\n📞 **৬২৮৯৬৩৮৬৪৯** (বিকল্প হেল্পলাইন)\n📧 ইমেইল: info@raimondsolar.in\n\nআমাদের একজন প্রতিনিধি ২৪ ঘণ্টার মধ্যে যোগাযোগ করবেন। আপনার ফোন নম্বর ও জেলা আমাদের মেসেজ করলেই সোলার সার্ভেয়ার সরাসরি যোগাযোগ করে নেবেন।`;
+        return `আপনি আমাদের সাথে সরাসরি কথা বলতে পারেন বা হোয়াটসঅ্যাপে মেসেজ পাঠাতে পারেন:\n📞 **৯০৭৩০৫৯৭৮০** (প্রধান হেল্পলাইন)\n📞 **৬২৮৯৬৩৮৬৪৯** (বিকল্প হেল্পলাইন)\n📧 ইমেইল: raimondsolar83@gmail.com\n\nআমাদের একজন প্রতিনিধি ২৪ ঘণ্টার মধ্যে যোগাযোগ করবেন। আপনার ফোন নম্বর ও জেলা আমাদের মেসেজ করলেই সোলার সার্ভেয়ার সরাসরি যোগাযোগ করে নেবেন।`;
       }
 
       return `নমস্কার! বর্তমানে অতিরিক্ত ট্রাফিকের কারণে আমাদের অটোমেটেড এআই অ্যাসিস্ট্যান্ট সাময়িকভাবে অফলাইনে রয়েছে। \n\nরেজিস্ট্রেশন, সরকারি সর্বোচ্চ ভর্তুকি, এবং ফ্রি কোটেশনের জন্য অনুগ্রহ করে আপনার **১) নাম, ২) ফোন নম্বর এবং ৩) জেলা** এখানে লিখে দিন। অথবা আমাদের সোলার টিমের সাথে সরাসরি যোগাযোগ করুন:\n📞 **৯০৭৩০৫৯৭৮০** / **৬২৮৯৬৩৮৬৪৯** (কল বা হোয়াটসঅ্যাপ করুন - Raimond Solar)`;
@@ -644,6 +875,18 @@ export default function RaimondSolarLandingPage() {
     trackEvent("Button Click", { action: `Claim Pricing from Calculator: ${size}kW` });
   };
 
+  const handlePackageBook = (size: number) => {
+    setPopupPreferredSystem(`${size}kWp`);
+    setIsPopupOpen(true);
+    trackEvent("Button Click", { action: `Book Package Click: ${size}kWp` });
+  };
+
+  const handleHeroConsultationBook = () => {
+    setPopupPreferredSystem("");
+    setIsPopupOpen(true);
+    trackEvent("Button Click", { action: "Book Free Consultation Hero" });
+  };
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-amber-100 p-0 m-0 font-sans">
 
@@ -677,14 +920,20 @@ export default function RaimondSolarLandingPage() {
           </strong>
         </div>
         <p className="text-[10px] sm:text-xs text-slate-900 font-semibold max-w-4xl mx-auto leading-relaxed break-words text-center">
-          We assist in PM Surya Ghar National Portal Subsidy applications as a registered installer. Raimond Solar is an Empaneled/Registered Vendor for WBSEDCL & CESC consumers. We assist and guide consumers to apply for subsidy under the PM Surya Ghar National Portal.
+          We assist in Government Subsidy Scheme applications as a registered installer. Raimond Solar is an Empaneled/Registered Vendor for WBSEDCL & CESC consumers. We assist and guide consumers to apply for subsidy under the government portal.
         </p>
       </div>
 
       {/* Modern Floating Header Bar */}
       <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md relative">
         <div className="max-w-7xl mx-auto py-3 px-2 sm:px-4 flex flex-row items-center justify-between w-full gap-1 sm:gap-4">
-          <Link href="/" className="shrink-0 flex items-center gap-2 sm:gap-2.5">
+          <Link href="/" className="shrink-0 flex items-center gap-2 sm:gap-3">
+            <img 
+              src="https://assets.zyrosite.com/pdf53TOKTfqD9wIN/logo-raimond-symbol-Nzgl40wncJgQVrtY.jpg"
+              alt="Raimond Solar Logo"
+              className="h-8 sm:h-10 w-auto rounded object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold tracking-tight sm:tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display whitespace-nowrap">
               RAIMOND SOLAR PVT LTD
             </span>
@@ -869,123 +1118,20 @@ export default function RaimondSolarLandingPage() {
 
       {/* HERO SECTION with High-Quality Solar Panel Background Roof Image */}
       <section 
-        className="relative overflow-hidden py-10 md:py-20 px-4 sm:px-8 bg-cover bg-center bg-no-repeat" 
+        className="relative overflow-hidden py-16 md:py-24 px-4 sm:px-8 flex flex-col justify-center min-h-[90vh]" 
         id="home"
-        style={{ 
-          backgroundImage: `url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=1920')`
-        }}
       >
-        {/* Dark material gradient overlay for legibility - Responsive gradient flow */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-900/85 to-slate-950/75 lg:bg-gradient-to-r lg:from-slate-950/90 lg:via-slate-950/70 lg:to-slate-900/40 pointer-events-none z-0 animate-fade-in" />
+        <HeroSlideshow />
         
-        {/* Dynamic Sky Clouds Auto-Drifting Animation Overlay */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 select-none">
-          {/* Custom Portable CSS Animation Styles for Cloud Drifting */}
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes cloud-drift-slow {
-              0% {
-                transform: translate3d(-400px, 0, 0);
-                opacity: 0;
-              }
-              10% {
-                opacity: 0.16;
-              }
-              90% {
-                opacity: 0.16;
-              }
-              100% {
-                transform: translate3d(105vw, 0, 0);
-                opacity: 0;
-              }
-            }
+        
 
-            @keyframes cloud-drift-medium {
-              0% {
-                transform: translate3d(-500px, 0, 0);
-                opacity: 0;
-              }
-              15% {
-                opacity: 0.12;
-              }
-              85% {
-                opacity: 0.12;
-              }
-              100% {
-                transform: translate3d(105vw, 0, 0);
-                opacity: 0;
-              }
-            }
-
-            @keyframes cloud-drift-fast {
-              0% {
-                transform: translate3d(-300px, 0, 0);
-                opacity: 0;
-              }
-              25% {
-                opacity: 0.08;
-              }
-              75% {
-                opacity: 0.08;
-              }
-              100% {
-                transform: translate3d(105vw, 0, 0);
-                opacity: 0;
-              }
-            }
-
-            .animate-cloud-slow {
-              animation: cloud-drift-slow 85s linear infinite;
-            }
-
-            .animate-cloud-medium {
-              animation: cloud-drift-medium 62s linear infinite;
-              animation-delay: 18s;
-            }
-
-            .animate-cloud-fast {
-              animation: cloud-drift-fast 42s linear infinite;
-              animation-delay: 35s;
-            }
-          `}} />
-
-          {/* Cloud Formation 1 - Slow & High Sky */}
-          <div 
-            className="absolute top-[5%] left-0 w-[420px] text-white/90 filter blur-[15px] animate-cloud-slow"
-            style={{ willChange: "transform" }}
-          >
-            <svg viewBox="0 0 100 60" className="w-full h-auto fill-current">
-              <path d="M 12 40 Q 15 28 28 28 Q 32 18 45 18 Q 58 18 64 28 Q 78 28 80 40 Q 82 50 70 50 L 22 50 Q 8 50 12 40 Z" />
-            </svg>
-          </div>
-          
-          {/* Cloud Formation 2 - Medium & Middle Sky */}
-          <div 
-            className="absolute top-[18%] left-0 w-[550px] text-sky-100/80 filter blur-[22px] animate-cloud-medium"
-            style={{ willChange: "transform" }}
-          >
-            <svg viewBox="0 0 100 60" className="w-full h-auto fill-current">
-              <path d="M 10 42 A 15 15 0 0 1 25 25 A 20 20 0 0 1 60 20 A 18 18 0 0 1 85 30 A 14 14 0 0 1 90 42 Z" />
-            </svg>
-          </div>
-
-          {/* Cloud Formation 3 - Fast & Lower Sky */}
-          <div 
-            className="absolute top-[32%] left-0 w-[320px] text-white/70 filter blur-[12px] animate-cloud-fast"
-            style={{ willChange: "transform" }}
-          >
-            <svg viewBox="0 0 100 60" className="w-full h-auto fill-current">
-              <path d="M 20 45 C 20 40, 25 35, 30 35 C 32 30, 38 25, 45 25 C 52 25, 58 30, 60 35 C 65 35, 75 40, 75 48 L 20 48 Z" />
-            </svg>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10 w-full max-w-full overflow-hidden">
+        <div className="max-w-4xl mx-auto flex flex-col items-center justify-center relative z-10 w-full max-w-full overflow-hidden mt-8">
           
           {/* Main Hero Header Highlights */}
-          <div className="lg:col-span-7 space-y-6 text-left w-full max-w-full overflow-hidden">
- 
+          <div className="space-y-6 text-center w-full max-w-full overflow-hidden flex flex-col items-center">
+            
             {/* Bengali/English Hybrid Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight font-display animate-fade-in text-center lg:text-left break-words w-full max-w-full whitespace-normal">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight font-display animate-fade-in text-center break-words w-full max-w-full whitespace-normal">
               <span className="block md:inline">সরকারি ভর্তুকির সুবিধায়</span>{" "}
               <span className="block md:inline">নিজের বাড়িতে সোলার বসান ও</span>{" "}
               <span className="block md:inline">
@@ -994,11 +1140,11 @@ export default function RaimondSolarLandingPage() {
             </h1>
  
             {/* Subheadline Details */}
-            <p className="text-slate-100 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed drop-shadow-sm font-bold text-center lg:text-left mt-5 mb-5 md:mt-6">
+            <p className="text-slate-100 text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed drop-shadow-sm font-bold text-center mt-5 mb-5 md:mt-6">
               পশ্চিমবঙ্গের একটি MSME ও ISO সার্টিফাইড সোলার কোম্পানি <strong className="text-white font-black bg-slate-900/40 px-1 py-0.5 rounded">RAIMOND SOLAR PVT LTD</strong>-র সাহায্যে আপনার বাড়ির ছাদকে বানান আপনার নিজস্ব গ্রিন বিদ্যুৎ কেন্দ্র।
             </p>
  
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl mx-auto lg:mx-0 text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl mx-auto text-left">
               <div className="flex items-start gap-2.5 bg-slate-900/80 border border-slate-800 p-3 rounded-2xl">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
@@ -1030,30 +1176,38 @@ export default function RaimondSolarLandingPage() {
             </div>
  
             {/* Hero Interactive CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 justify-center lg:justify-start">
+            <div className="flex flex-col gap-3 pt-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => scrollToSection("price")}
+                  className="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-center rounded-2xl transition-all shadow-[0_5px_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 hover:scale-108 hover:shadow-emerald-500/40 active:scale-95 duration-200 cursor-pointer"
+                >
+                  View Package Prices (প্যাকেজ মূল্য) <ArrowRight className="w-4 h-4" />
+                </button>
+                
+                {/* WhatsApp direct trigger with official design */}
+                <a
+                  href="https://wa.me/919073059780?text=I%20want%20to%20know%20more%20about%20Raimond%20Solar%20Subsidy%20Setup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent("WhatsApp Click", { location: "Hero Section Quick Link" })}
+                  id="gtm-whatsapp-btn"
+                  className="gtm-whatsapp-click px-6 py-4 bg-[#25D366] hover:bg-[#20ba59] text-gray-950 font-black text-center rounded-2xl transition-all shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_12px_35px_rgba(37,211,102,0.65)] flex items-center justify-center gap-2 hover:scale-108 active:scale-95 duration-200 cursor-pointer border border-[#25D366]"
+                >
+                  <WhatsAppIcon className="w-5 h-5 text-gray-950 fill-gray-950" /> 
+                  <span>WhatsApp Now</span>
+                </a>
+              </div>
               <button
-                onClick={() => scrollToSection("price")}
-                className="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-center rounded-2xl transition-all shadow-[0_5px_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2 hover:scale-108 hover:shadow-emerald-500/40 active:scale-95 duration-200 cursor-pointer"
+                onClick={handleHeroConsultationBook}
+                className="px-6 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-center rounded-2xl transition-all shadow-[0_5px_20px_rgba(245,158,11,0.35)] flex items-center justify-center gap-2 hover:scale-105 hover:shadow-amber-500/40 active:scale-95 duration-200 cursor-pointer w-full sm:w-auto self-center"
               >
-                View Package Prices (প্যাকেজ মূল্য) <ArrowRight className="w-4 h-4" />
+                Book Free Consultation
               </button>
-              
-              {/* WhatsApp direct trigger with official design */}
-              <a
-                href="https://wa.me/919073059780?text=I%20want%20to%20know%20more%20about%20Raimond%20Solar%20Subsidy%20Setup"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("WhatsApp Click", { location: "Hero Section Quick Link" })}
-                id="gtm-whatsapp-btn"
-                className="gtm-whatsapp-click px-6 py-4 bg-[#25D366] hover:bg-[#20ba59] text-gray-950 font-black text-center rounded-2xl transition-all shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_12px_35px_rgba(37,211,102,0.65)] flex items-center justify-center gap-2 hover:scale-108 active:scale-95 duration-200 cursor-pointer border border-[#25D366]"
-              >
-                <WhatsAppIcon className="w-5 h-5 text-gray-950 fill-gray-950" /> 
-                <span>WhatsApp Now</span>
-              </a>
             </div>
 
             {/* Core Metrics Summary */}
-            <div className="pt-6 grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-slate-800/80">
+            <div className="pt-6 grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-slate-700/80 mt-6 w-full max-w-3xl">
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">500+</div>
                 <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Successful Solar Projects</div>
@@ -1073,275 +1227,25 @@ export default function RaimondSolarLandingPage() {
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-black text-amber-500 font-display">25 Yr</div>
-                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5">Panel Performance Warranty</div>
+                <div className="text-[10px] text-slate-400 tracking-wider uppercase font-extrabold mt-0.5 relative group cursor-help w-max">
+                  Panel Performance Warranty*
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] bg-slate-900 text-white text-[9px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 text-center leading-tight normal-case font-normal shadow-lg">
+                    *As per solar panel manufacturer&apos;s warranty terms.
+                  </span>
+                </div>
               </div>
-            </div>
+            
+          
+
+        </div>
           </div>
- 
-          {/* HIGH-CONVERSION HERO LEAD CAPTURE FORM SHEET */}
-          <div className="lg:col-span-5 relative mt-6 lg:mt-0 font-sans" id="hero-lead-form">
-            <AnimatePresence mode="wait">
-              {leadSubmitted ? (
-                <motion.div
-                  key="thank-you-view"
-                  id="gtm-lead-success-message"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="bg-white text-slate-900 border border-emerald-200 rounded-3xl p-8 relative shadow-2xl text-center relative overflow-hidden"
-                >
-                  {/* Glowing success top bar */}
-                  <div className="absolute top-0 inset-x-0 h-1.5 bg-emerald-500 shadow-[0_2px_10px_rgba(16,185,129,0.3)] animate-pulse" />
-                  
-                  {/* Animated Checkmark Bubble */}
-                  <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-5 relative shadow-inner">
-                    <span className="absolute inset-0 rounded-full bg-emerald-400/20 animate-ping pointer-events-none" />
-                    <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
-                  </div>
-
-                  <h3 className="text-2xl font-black text-slate-950 font-display tracking-tight">আপনার বুকিং সফল হয়েছে!</h3>
-                  <p className="text-xs text-sky-700 font-extrabold uppercase tracking-widest mt-1.5 block">
-                    We Will Contact You Shortly
-                  </p>
-                  
-                  <p className="text-sm text-slate-650 text-slate-600 mt-4 leading-relaxed font-semibold">
-                    ধন্যবাদ! আমাদের Solar Expert Agent <strong className="text-amber-500 font-bold">Raimond Solar Team</strong> ২৪ ঘণ্টার মধ্যে আপনার সাথে সরাসরি যোগাযোগ করবেন।
-                  </p>
-
-                  {/* Immediate Action Buttons (Call & WhatsApp) */}
-                  <div className="mt-7 space-y-3.5">
-                    {/* Direct WhatsApp Call to Action */}
-                    <a
-                      href="https://wa.me/919073059780?text=I%20have%20registered%20for%20a%20solar%20consultation.%20Please%20provide%20pricing."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      id="gtm-whatsapp-btn"
-                      className="gtm-whatsapp-click flex items-center justify-center gap-3 w-full py-4 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm rounded-2xl transition-all shadow-[0_4px_20px_rgba(16,185,129,0.35)] hover:scale-[1.02] active:scale-95 cursor-pointer"
-                    >
-                      <WhatsAppIcon className="w-5 h-5 text-white fill-current" />
-                      হোয়াটসঅ্যাপ চ্যাট (WhatsApp Now)
-                    </a>
-
-                    {/* Direct Phone Call Button */}
-                    <a
-                      href="tel:9073059780"
-                      id="gtm-call-btn"
-                      className="gtm-call-click flex items-center justify-center gap-3 w-full py-3.5 px-5 bg-slate-900 hover:bg-slate-800 text-white font-black text-sm rounded-2xl transition-all shadow-[0_4px_12px_rgba(15,23,42,0.15)] hover:scale-[1.02] active:scale-95 cursor-pointer"
-                    >
-                      <Phone className="w-4.5 h-4.5 text-amber-500 animate-pulse" />
-                      সরাসরি কল করতে (Call Support)
-                    </a>
-                  </div>
-
-                  {/* Trust point indicator */}
-                  <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                    ⚡ Official PM Surya Ghar Vendor Partner
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setLeadSubmitted(false);
-                      trackEvent("Button Click", { action: "Fill Form Again" });
-                    }}
-                    className="mt-6 text-xs text-slate-500 hover:text-slate-800 font-bold transition-colors inline-block cursor-pointer underline underline-offset-4"
-                  >
-                    নতুন বুকিং করুন (New Registration)
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="lead-form-view"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="bg-white text-slate-900 border border-slate-200/80 rounded-3xl p-6 sm:p-8 relative shadow-2xl overflow-hidden"
-                >
-                  {/* Modern top gradient bar decoration */}
-                  <div className="absolute top-0 left-0 w-full h-[5px] bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-500" />
-
-                  <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                      </span>
-                      <span className="text-[9px] sm:text-[10px] bg-emerald-50 border border-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-black uppercase tracking-widest font-display inline-block">
-                        REGISTERED VENDOR FOR WBSEDCL CONSUMERS
-                      </span>
-                    </div>
-                    <h3 className="text-2xl font-black text-slate-950 mt-1 tracking-tight font-display">Book Free Consultation</h3>
-                    <p className="text-xs text-slate-600 mt-2 font-medium">সহজ ফর্মটি পূরণ করুন, আমাদের সোলার বিশেষজ্ঞ সরাসরি ফোনে ১৫ মিনিটে যোগাযোগ করবেন।</p>
-                  </div>
-
-                  {formErr && (
-                    <div className="bg-rose-50 border border-rose-200 text-rose-700 p-3 rounded-xl text-xs mb-4 font-bold text-center flex items-center justify-center gap-2">
-                      ⚠️ {formErr}
-                    </div>
-                  )}
-
-                  <form id="solarLeadForm" onSubmit={handleLeadFormSubmit} className="space-y-4">
-                    {/* Name */}
-                    <div>
-                      <label htmlFor="fullName" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
-                        আপনার সম্পূর্ণ নাম (Your Full Name) <span className="text-rose-500 font-extrabold">*</span>
-                      </label>
-                      <div className="relative group">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors pointer-events-none">
-                          <User className="w-4 h-4" />
-                        </div>
-                        <input
-                          id="fullName"
-                          type="text"
-                          required
-                          placeholder="যেমন: রামপ্রসাদ মুখার্জী"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-900 focus:outline-none transition-all duration-200 font-semibold"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Phone number */}
-                    <div>
-                      <label htmlFor="phone" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
-                        ফোন নম্বর (Valid Mobile Number) <span className="text-rose-500 font-extrabold">*</span>
-                      </label>
-                      <div className="relative group">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors flex items-center pr-2.5 border-r border-slate-200 gap-1.5 pointer-events-none">
-                          <Phone className="w-3.5 h-3.5" />
-                          <span className="font-mono text-slate-500 font-bold text-xs">+91</span>
-                        </div>
-                        <input
-                          id="phone"
-                          type="tel"
-                          required
-                          maxLength={10}
-                          placeholder="১০ ডিজিটের মোবাইল নম্বর"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl pl-20 pr-4 py-3 text-xs sm:text-sm text-slate-900 focus:outline-none transition-all duration-200 font-mono font-semibold"
-                        />
-                      </div>
-                    </div>
-
-                    {/* District Select Dropdown */}
-                    <div>
-                      <label htmlFor="district" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
-                        পশ্চিমবঙ্গের জেলা (District) <span className="text-rose-500 font-extrabold">*</span>
-                      </label>
-                      <div className="relative group">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors pointer-events-none">
-                          <MapPin className="w-4 h-4" />
-                        </div>
-                        <select
-                          id="district"
-                          value={district}
-                          onChange={(e) => setDistrict(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl pl-11 pr-10 py-3 text-xs sm:text-sm text-slate-800 focus:outline-none transition-all cursor-pointer font-bold appearance-none"
-                        >
-                          {WB_DISTRICTS.map((item) => (
-                            <option key={item} value={item}>
-                              {item}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:text-emerald-500">
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Monthly Bill & Preferred System */}
-                    <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
-                      <div>
-                        <label htmlFor="monthlyBill" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
-                          মাসিক বিল (Avg Bill)
-                        </label>
-                        <div className="relative group">
-                          <select
-                            id="monthlyBill"
-                            value={monthlyBill}
-                            onChange={(e) => setMonthlyBill(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl px-3 pr-8 py-3 text-xs text-slate-800 focus:outline-none transition-all cursor-pointer font-bold appearance-none"
-                          >
-                            <option value="₹500-1000">₹500-1000</option>
-                            <option value="₹1000-2000">₹1000-2000</option>
-                            <option value="₹2000-3000">₹2000-3000</option>
-                            <option value="₹3000-5000">₹3000-5000</option>
-                            <option value="₹5000+">₹5000+</option>
-                          </select>
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                            <ChevronDown className="w-3.5 h-3.5" />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label htmlFor="preferredSystem" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
-                          সিস্টেম সাইজ (Size)
-                        </label>
-                        <div className="relative group">
-                          <select
-                            id="preferredSystem"
-                            value={preferredSystem}
-                            onChange={(e) => setPreferredSystem(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl px-3 pr-8 py-3 text-xs text-slate-800 focus:outline-none transition-all cursor-pointer font-bold appearance-none"
-                          >
-                            <option value="1kWp">1kWp System</option>
-                            <option value="2kWp">2kWp System</option>
-                            <option value="3kWp">3kWp System</option>
-                            <option value="4kWp">4kWp System</option>
-                            <option value="5kWp">5kWp System</option>
-                            <option value="5kWp-100kWp">5-100kWp Max</option>
-                          </select>
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                            <ChevronDown className="w-3.5 h-3.5" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Submit CTA */}
-                    <button
-                      type="submit"
-                      disabled={submittingLead}
-                      className="w-full py-4 text-center text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-[0.985] font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:shadow-[0_8px_20px_rgba(16,185,129,0.4)] disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer mt-5"
-                    >
-                      {submittingLead ? (
-                        <>
-                          <span className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                          বুকিং হচ্ছে... (Booking...)
-                        </>
-                      ) : (
-                        <>
-                          ফ্রি পরামর্শ ও সাইট সার্ভে বুক করুন <ArrowRight className="w-4.5 h-4.5" />
-                        </>
-                      )}
-                    </button>
-
-                    {/* Consent line under submit button */}
-                    <p className="text-center text-[11px] text-slate-500 mt-2 leading-relaxed">
-                      ফর্ম জমা দিয়ে আপনি আমাদের Privacy Policy অনুযায়ী যোগাযোগের সম্মতি দিচ্ছেন।
-                    </p>
-
-                    {/* Trust details */}
-                    <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[10px] text-slate-500 font-bold">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                      <span>No commitments • Free design blueprint included</span>
-                    </div>
-                  </form>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
- 
         </div>
       </section>
 
       {/* Top Disclaimer Visibility Layer */}
       <div className="bg-slate-50 border-b border-slate-200/80 py-4 px-4 sm:px-8 text-center text-[10px] sm:text-xs text-slate-500 leading-relaxed font-semibold">
         <div className="max-w-7xl mx-auto">
-          ⚠️ We are an independent, private solar installation company — NOT a government body or the official PM Surya Ghar portal.
+          ⚠️ We are an independent, private solar installation company — NOT a government body or the official government portal.
         </div>
       </div>
 
@@ -1350,10 +1254,10 @@ export default function RaimondSolarLandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display mb-3">
-              PM Surya Ghar Subsidy Slabs
+              Solar Subsidy Slabs (পশ্চিমবঙ্গ)
             </h2>
             <p className="text-slate-500 text-sm font-medium">
-              Estimated capacity based on your current electricity bills. Subsidy amounts are subject to PM Surya Ghar guidelines.
+              Estimated capacity based on your current electricity bills. Subsidy amounts are subject to government guidelines.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
@@ -1489,11 +1393,11 @@ export default function RaimondSolarLandingPage() {
                       </div>
                       <div className="flex flex-col border-b border-slate-100/60 pb-1.5 gap-1">
                         <div className="flex justify-between text-xs text-emerald-600 font-bold">
-                          <span>Estimated National Portal Subsidy:</span>
+                          <span>Estimated Govt. Subsidy:</span>
                           <span className="font-mono bg-emerald-100/60 px-2 py-0.5 rounded text-emerald-700">-{pkg.subsidy}</span>
                         </div>
                         <span className="text-[11px] text-slate-400 font-normal text-right leading-tight">
-                          Estimated subsidy, subject to MNRE National Portal approval.
+                          Estimated subsidy, subject to MNRE approval.
                         </span>
                       </div>
                       
@@ -1546,7 +1450,7 @@ export default function RaimondSolarLandingPage() {
 
                   <div className="pt-6 mt-5 border-t border-slate-100">
                     <button
-                      onClick={() => handleClaimCalculatorPkg(pkg.id === "pkg-1kw" ? 1 : pkg.id === "pkg-2kw" ? 2 : pkg.id === "pkg-3kw" ? 3 : pkg.id === "pkg-4kw" ? 4 : 5)}
+                      onClick={() => handlePackageBook(pkg.id === "pkg-1kw" ? 1 : pkg.id === "pkg-2kw" ? 2 : pkg.id === "pkg-3kw" ? 3 : pkg.id === "pkg-4kw" ? 4 : 5)}
                       id="gtm-book-package-btn"
                       className={`gtm-book-package-click w-full py-3 px-4 rounded-xl font-black text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 ${
                         isHighlyRecommended
@@ -1812,7 +1716,7 @@ export default function RaimondSolarLandingPage() {
                   </span>
                 </div>
                 <div className="bg-emerald-50/50 border border-emerald-100 p-4 rounded-2xl">
-                  <span className="text-[10px] text-emerald-700 block uppercase font-bold tracking-wider font-display">Estimated Govt. Subsidy (Subject to National Portal Approval)</span>
+                  <span className="text-[10px] text-emerald-700 block uppercase font-bold tracking-wider font-display">Estimated Govt. Subsidy (Subject to Approval)</span>
                   <span className="text-xl sm:text-2xl font-black font-mono text-emerald-600">
                     -₹{calculatedSubsidy.toLocaleString("en-IN")}
                   </span>
@@ -2071,7 +1975,7 @@ export default function RaimondSolarLandingPage() {
             },
             {
               q: "What is the difference between On-Grid and Off-Grid solar systems?",
-              a: "On-Grid systems operate without battery backup, exporting surplus daytime solar power directly back to the WBSEDCL/CESC grid. Off-Grid systems use batteries to store electricity for use during utility load shedding. Crucially, the official PM Surya Ghar government subsidy is only applicable for On-Grid solar installations.",
+              a: "On-Grid systems operate without battery backup, exporting surplus daytime solar power directly back to the WBSEDCL/CESC grid. Off-Grid systems use batteries to store electricity for use during utility load shedding. Crucially, the official government subsidy is only applicable for On-Grid solar installations.",
             },
             {
               q: "How many electricity units does a 1kWp system generate daily on average?",
@@ -2139,7 +2043,8 @@ export default function RaimondSolarLandingPage() {
             </a>
             <button
               onClick={() => {
-                scrollToSection("home");
+                setPopupPreferredSystem("");
+                setIsPopupOpen(true);
                 trackEvent("Button Click", { action: "Footer Section Booking CTA Click" });
               }}
               className="px-8 py-4.5 bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-500 hover:from-amber-400 hover:via-emerald-400 hover:to-teal-400 text-slate-950 font-black text-base rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(245,158,11,0.35)] hover:shadow-[0_15px_40px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 hover:scale-[1.15] hover:-translate-y-1 active:scale-90 duration-300 cursor-pointer outline-none border-none select-none group focus:ring-2 focus:ring-emerald-400"
@@ -2380,9 +2285,12 @@ export default function RaimondSolarLandingPage() {
           {/* Column 1: Brand Block */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,130,31,0.3)]">
-                <Sun className="w-7 h-7 text-white" />
-              </div>
+              <img 
+                src="https://assets.zyrosite.com/pdf53TOKTfqD9wIN/logo-raimond-symbol-Nzgl40wncJgQVrtY.jpg"
+                alt="Raimond Solar Logo"
+                className="h-10 sm:h-12 w-auto rounded object-contain shrink-0"
+                referrerPolicy="no-referrer"
+              />
               <div className="flex flex-col">
                 <span className="text-2xl font-black tracking-tight text-white font-display leading-none">
                   RAIMOND SOLAR
@@ -2394,7 +2302,7 @@ export default function RaimondSolarLandingPage() {
             </div>
             
             <p className="text-[15px] text-slate-300 leading-relaxed font-semibold">
-              র‍্যামন্ড সোলার প্রাইভেট লিমিটেড পশ্চিমবঙ্গের একটি তালিকাভুক্ত MSME সোলার এন্টারপ্রাইজ কোম্পানি। ছাদের অন-গ্রিড সংযোগ ও সরকারি ভর্তুকি রূপায়ণে আমরা আপনার সহযোগী।
+              Raimond Solar Pvt Ltd is a registered MSME solar enterprise company in West Bengal. We are your partner in rooftop on-grid solar connections and government subsidy implementation.
             </p>
             <div className="text-sm text-emerald-400 font-bold flex items-center gap-1.5 pt-1">
               <ShieldCheck className="w-5 h-5 text-emerald-400" /> 
@@ -2461,7 +2369,7 @@ export default function RaimondSolarLandingPage() {
                 WhatsApp Chat: <a href="https://wa.me/919073059780" className="text-[#25D366] relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#25D366] after:transition-all after:duration-300 hover:after:w-full hover:text-[#25D366] font-mono font-bold hover:drop-shadow-[0_0_8px_rgba(37,211,102,0.5)] transition-colors">9073059780</a>
               </li>
               <li>
-                Email Desk: <a href="mailto:info@raimondsolar.in" className="text-slate-300 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-white transition-colors hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">info@raimondsolar.in</a>
+                Email Desk: <a href="mailto:raimondsolar83@gmail.com" className="text-slate-300 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-white transition-colors hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">raimondsolar83@gmail.com</a>
               </li>
             </ul>
 
@@ -2508,6 +2416,220 @@ export default function RaimondSolarLandingPage() {
         </div>
       </footer>
 
+      {/* Booking Popup Modal */}
+      <AnimatePresence>
+        {isPopupOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto" onClick={() => setIsPopupOpen(false)}>
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden relative my-8"
+            >
+              <button 
+                onClick={() => setIsPopupOpen(false)}
+                className="absolute top-4 right-4 p-2 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full transition-colors z-10"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="p-6 sm:p-8">
+                {popupLeadSubmitted ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Check className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-xl font-black text-slate-900 font-display mb-2">ধন্যবাদ!</h3>
+                    <p className="text-slate-600 font-medium">আমাদের টিম শীঘ্রই যোগাযোগ করবে।</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="mb-6">
+                      <div className="inline-flex items-center gap-1.5 mb-2">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] bg-emerald-50 border border-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-black uppercase tracking-widest font-display inline-block">
+                          REGISTERED VENDOR FOR WBSEDCL CONSUMERS
+                        </span>
+                      </div>
+                      <h3 className="text-2xl font-black text-slate-950 mt-1 tracking-tight font-display">Book Free Consultation</h3>
+                      <p className="text-xs text-slate-600 mt-2 font-medium">সহজ ফর্মটি পূরণ করুন, আমাদের সোলার বিশেষজ্ঞ সরাসরি ফোনে ১৫ মিনিটে যোগাযোগ করবেন।</p>
+                    </div>
+
+                    {popupFormErr && (
+                      <div className="bg-rose-50 border border-rose-200 text-rose-700 p-3 rounded-xl text-xs mb-4 font-bold text-center flex items-center justify-center gap-2">
+                        ⚠️ {popupFormErr}
+                      </div>
+                    )}
+
+                    <form onSubmit={handlePopupFormSubmit} className="space-y-4">
+                      {/* Name */}
+                      <div>
+                        <label htmlFor="popupFullName" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
+                          আপনার সম্পূর্ণ নাম (Your Full Name) <span className="text-rose-500 font-extrabold">*</span>
+                        </label>
+                        <div className="relative group">
+                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors pointer-events-none">
+                            <User className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="popupFullName"
+                            type="text"
+                            required
+                            placeholder="যেমন: রামপ্রসাদ মুখার্জী"
+                            value={popupFullName}
+                            onChange={(e) => setPopupFullName(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-900 focus:outline-none transition-all duration-200 font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Phone number */}
+                      <div>
+                        <label htmlFor="popupPhone" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
+                          ফোন নম্বর (Valid Mobile Number) <span className="text-rose-500 font-extrabold">*</span>
+                        </label>
+                        <div className="relative group">
+                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors flex items-center pr-2.5 border-r border-slate-200 gap-1.5 pointer-events-none">
+                            <Phone className="w-3.5 h-3.5" />
+                            <span className="font-mono text-slate-500 font-bold text-xs">+91</span>
+                          </div>
+                          <input
+                            id="popupPhone"
+                            type="tel"
+                            required
+                            maxLength={10}
+                            placeholder="১০ ডিজিটের মোবাইল নম্বর"
+                            value={popupPhone}
+                            onChange={(e) => setPopupPhone(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl pl-20 pr-4 py-3 text-xs sm:text-sm text-slate-900 focus:outline-none transition-all duration-200 font-mono font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                        {/* District */}
+                        <div>
+                          <label htmlFor="popupDistrict" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
+                            পশ্চিমবঙ্গের জেলা
+                          </label>
+                          <div className="relative group">
+                            <select
+                              id="popupDistrict"
+                              value={popupDistrict}
+                              onChange={(e) => setPopupDistrict(e.target.value)}
+                              className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl px-3 pr-8 py-3 text-xs text-slate-800 focus:outline-none transition-all cursor-pointer font-bold appearance-none"
+                            >
+                              <option value="Kolkata">Kolkata</option>
+                              <option value="Howrah">Howrah</option>
+                              <option value="Hooghly">Hooghly</option>
+                              <option value="North 24 Parganas">North 24 Pgs</option>
+                              <option value="South 24 Parganas">South 24 Pgs</option>
+                              <option value="Nadia">Nadia</option>
+                              <option value="Murshidabad">Murshidabad</option>
+                              <option value="Burdwan">Burdwan (East/West)</option>
+                              <option value="Birbhum">Birbhum</option>
+                              <option value="Bankura">Bankura</option>
+                              <option value="Purulia">Purulia</option>
+                              <option value="Midnapore">Midnapore (East/West)</option>
+                              <option value="Malda">Malda</option>
+                              <option value="Other">Other District</option>
+                            </select>
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                              <MapPin className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Bill Amount */}
+                        <div>
+                          <label htmlFor="popupMonthlyBill" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
+                            মাসিক বিল (Monthly Bill)
+                          </label>
+                          <div className="relative group">
+                            <select
+                              id="popupMonthlyBill"
+                              value={popupMonthlyBill}
+                              onChange={(e) => setPopupMonthlyBill(e.target.value)}
+                              className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl px-3 pr-8 py-3 text-xs text-slate-800 focus:outline-none transition-all cursor-pointer font-bold appearance-none"
+                            >
+                              <option value="Below ₹1000">Below ₹1000</option>
+                              <option value="₹1000-2000">₹1000 - ₹2000</option>
+                              <option value="₹2000-3000">₹2000 - ₹3000</option>
+                              <option value="₹3000-5000">₹3000 - ₹5000</option>
+                              <option value="Above ₹5000">Above ₹5000</option>
+                            </select>
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                              <IndianRupee className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label htmlFor="popupPreferredSystem" className="text-[10px] text-slate-700 uppercase font-black tracking-wider block mb-1.5 label-title">
+                          সিস্টেম সাইজ (Size)
+                        </label>
+                        <div className="relative group">
+                          <select
+                            id="popupPreferredSystem"
+                            value={popupPreferredSystem}
+                            onChange={(e) => setPopupPreferredSystem(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl px-3 pr-8 py-3 text-xs text-slate-800 focus:outline-none transition-all cursor-pointer font-bold appearance-none"
+                          >
+                            <option value="1kWp">1kWp System</option>
+                            <option value="2kWp">2kWp System</option>
+                            <option value="3kWp">3kWp System</option>
+                            <option value="4kWp">4kWp System</option>
+                            <option value="5kWp">5kWp System</option>
+                            <option value="5kWp-100kWp">5-100kWp Max</option>
+                            <option value="Other Solar System">Other Solar System (অন্যান্য সোলার সিস্টেম)</option>
+                          </select>
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Submit CTA */}
+                      <button
+                        type="submit"
+                        disabled={submittingPopupLead}
+                        className="w-full py-4 text-center text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-[0.985] font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-[0_5px_15px_rgba(16,185,129,0.3)] hover:shadow-[0_8px_20px_rgba(16,185,129,0.4)] disabled:opacity-50 flex items-center justify-center gap-2.5 cursor-pointer mt-5"
+                      >
+                        {submittingPopupLead ? (
+                          <>
+                            <span className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                            বুকিং হচ্ছে... (Booking...)
+                          </>
+                        ) : (
+                          <>
+                            ফ্রি পরামর্শ ও সাইট সার্ভে বুক করুন <ArrowRight className="w-4.5 h-4.5" />
+                          </>
+                        )}
+                      </button>
+
+                      {/* Consent line under submit button */}
+                      <p className="text-center text-[11px] text-slate-500 mt-2 leading-relaxed">
+                        ফর্ম জমা দিয়ে আপনি আমাদের Privacy Policy অনুযায়ী যোগাযোগের সম্মতি দিচ্ছেন।
+                      </p>
+                      
+                      <div className="flex items-center justify-center gap-2 mt-4 text-[10px] text-slate-400 font-bold tracking-wider uppercase">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> No commitments &bull; Free design blueprint included
+                      </div>
+                    </form>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Privacy Policy Modal */}
       <AnimatePresence>
         {isPrivacyOpen && (
@@ -2529,9 +2651,9 @@ export default function RaimondSolarLandingPage() {
                 <p className="font-bold">Last Updated: June 12, 2026</p>
                 <p>Welcome to Raimond Solar Pvt Ltd (&apos;we,&apos; &apos;our,&apos; or &apos;us&apos;). We values your privacy and are committed to protecting your personal data in accordance with applicable legal guidelines.</p>
                 <p><strong>1. Information We Collect:</strong> We collect personal details that you voluntarily submit to us via our pricing calculator and consultation inquiry forms, which include your Name, Phone Number, Monthly Electricity Bill Range, Preferred System Capacity, and District Location.</p>
-                <p><strong>2. How We Use Informational Data:</strong> The captured details are strictly processed to schedule on-site engineering surveys, evaluate technical grid capabilities, calculate rooftop solar output capacity, assist in MNRE/PM Surya Ghar applications, and optimize solar product consultation. We do not engage in renting or selling your personal information to third-party brokers.</p>
+                <p><strong>2. How We Use Informational Data:</strong> The captured details are strictly processed to schedule on-site engineering surveys, evaluate technical grid capabilities, calculate rooftop solar output capacity, assist in MNRE/government subsidy applications, and optimize solar product consultation. We do not engage in renting or selling your personal information to third-party brokers.</p>
                 <p><strong>3. Security Safeguards:</strong> We employ robust security measures, restricted firewall parameters, and data protection practices to safeguard information from unauthorized modification, tracking, or access.</p>
-                <p><strong>4. Contact Details:</strong> For questions concerning this policy, please reach us immediately at <a href="mailto:info@raimondsolar.in" className="text-sky-600 underline">info@raimondsolar.in</a>.</p>
+                <p><strong>4. Contact Details:</strong> For questions concerning this policy, please reach us immediately at <a href="mailto:raimondsolar83@gmail.com" className="text-sky-600 underline">raimondsolar83@gmail.com</a>.</p>
               </div>
             </motion.div>
           </div>
@@ -2558,7 +2680,7 @@ export default function RaimondSolarLandingPage() {
               <div className="text-xs text-slate-600 space-y-3 leading-relaxed">
                 <p className="font-bold">Last Updated: June 12, 2026</p>
                 <p>By accessing or navigating the Raimond Solar Pvt Ltd platform, you agree to comply with and be bound by the following Terms of Service:</p>
-                <p><strong>1. Private Enterprise Disclaimer:</strong> Raimond Solar Pvt Ltd is an independent, private solar engineering organization and MNRE list-integrated solar installation vendor in West Bengal. We are not a government entity, nor are we representing PM Surya Ghar Scheme directly. Any government portal submissions are cooperative assistance services.</p>
+                <p><strong>1. Private Enterprise Disclaimer:</strong> Raimond Solar Pvt Ltd is an independent, private solar engineering organization and MNRE list-integrated solar installation vendor in West Bengal. We are not a government entity, nor are we representing the government subsidy scheme directly. Any government portal submissions are cooperative assistance services.</p>
                 <p><strong>2. Quote & Estimates Accuracy:</strong> Calculations, ROI estimations, and subsidy numbers generated by the on-site calculator tool are highly detailed estimations intended purely for engineering and budgetary analysis. Actual price sheets vary depending on spatial layout constraints, roof shading, sub-district wiring configurations, and national-level subsidy approvals.</p>
                 <p><strong>3. Use Restrictions:</strong> Homeowners confirm that accurate customer billing and electricity records are provided for technical verification. User data is utilized strictly for technical feasibility reviews.</p>
                 <p><strong>4. Governing Authority:</strong> These terms are governed under Indian jurisdiction and MNRE / regional regulatory framework protocols of West Bengal.</p>
