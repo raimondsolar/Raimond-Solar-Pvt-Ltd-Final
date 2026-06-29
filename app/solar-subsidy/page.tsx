@@ -1975,7 +1975,7 @@ export default function RaimondSolarLandingPage() {
             },
             {
               q: "What is the difference between On-Grid and Off-Grid solar systems?",
-              a: "On-Grid systems operate without battery backup, exporting surplus daytime solar power directly back to the WBSEDCL/CESC grid. Off-Grid systems use batteries to store electricity for use during utility load shedding. Crucially, the official government subsidy is only applicable for On-Grid solar installations.",
+              a: "On-Grid systems operate without battery backup, exporting surplus daytime solar power directly back to the WBSEDCL/CESC grid. Off-Grid systems use batteries to store electricity for use during utility load shedding. Crucially, the official PM Surya Ghar government subsidy is only applicable for On-Grid solar installations.",
             },
             {
               q: "How many electricity units does a 1kWp system generate daily on average?",
@@ -2001,14 +2001,15 @@ export default function RaimondSolarLandingPage() {
                   }`}
                 />
               </button>
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {activeFaq === idx && (
                   <motion.div
+                    key="content"
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="border-t border-slate-100 bg-slate-50/40"
+                    className="border-t border-slate-100 bg-slate-50/40 overflow-hidden"
                   >
                     <p className="py-4 px-6 text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
                       {faq.a}

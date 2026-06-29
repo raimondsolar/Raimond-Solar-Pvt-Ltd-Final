@@ -14,9 +14,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "PM Surya Ghar Solar Subsidy in West Bengal | Raimond Solar Pvt Ltd",
-  description: "Get PM Surya Ghar Solar Subsidy in West Bengal. 1kW to 100kW Solar Solutions with WBSEDCL Support. Free Consultation. Call 9073059780.",
-  keywords: "Raimond Solar, PM Surya Ghar West Bengal, Solar Subsidy Kolkata, Rooftop Solar West Bengal, Solar Price WBSEDCL, Solar Net Metering West Bengal",
+  title: "Solar Subsidy & Installation in West Bengal | Raimond Solar Pvt Ltd",
+  description: "Get government solar subsidy support in West Bengal. 1kW to 100kW solar solutions with WBSEDCL & CESC support. Free consultation. Call 9073059780.",
+  keywords: "Raimond Solar, Solar Subsidy West Bengal, Solar Subsidy Kolkata, Rooftop Solar West Bengal, Solar Price WBSEDCL, Solar Net Metering West Bengal",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
