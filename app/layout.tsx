@@ -101,6 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} scroll-smooth`} suppressHydrationWarning>
       <GoogleTagManager gtmId="GTM-5X793Q6K" />
       <head>
+        <meta name="google-site-verification" content="dC3VziAbCyRRRPzrmrhCxrNga1R9LgbgWquUbXAMbbI" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}

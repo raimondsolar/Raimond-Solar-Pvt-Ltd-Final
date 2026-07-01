@@ -31,6 +31,7 @@ import {
   Droplets,
   Tractor,
   Check,
+  Copy,
   Facebook,
   Instagram,
   Youtube,
@@ -422,6 +423,14 @@ export default function RaimondSolarLandingPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const [copiedItem, setCopiedItem] = useState<string | null>(null);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedItem(text);
+    setTimeout(() => setCopiedItem(null), 2000);
+  };
 
   // Form lead submission states (Integrating working Government Subsidy Lead Form state)
   const [fullName, setFullName] = useState("");
@@ -928,12 +937,16 @@ export default function RaimondSolarLandingPage() {
       <nav className="sticky top-0 z-40 bg-white/95 border-b border-slate-200/80 shadow-md backdrop-blur-md relative">
         <div className="max-w-7xl mx-auto py-3 px-2 sm:px-4 flex flex-row items-center justify-between w-full gap-1 sm:gap-4">
           <Link href="/" className="shrink-0 flex items-center gap-2 sm:gap-3">
-            <img 
-              src="https://assets.zyrosite.com/pdf53TOKTfqD9wIN/logo-raimond-symbol-Nzgl40wncJgQVrtY.jpg"
-              alt="Raimond Solar Logo"
-              className="h-8 sm:h-10 w-auto rounded object-contain"
-              referrerPolicy="no-referrer"
-            />
+            <div className="relative h-8 sm:h-10 w-12 sm:w-16">
+              <Image 
+                src="https://assets.zyrosite.com/pdf53TOKTfqD9wIN/logo-raimond-symbol-Nzgl40wncJgQVrtY.jpg"
+                alt="Raimond Solar Logo"
+                fill
+                sizes="(max-width: 640px) 48px, 64px"
+                className="rounded object-contain"
+                referrerPolicy="no-referrer"
+              />
+            </div>
             <span className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold tracking-tight sm:tracking-wider text-blue-600 uppercase transition-colors hover:text-blue-700 font-display whitespace-nowrap">
               RAIMOND SOLAR PVT LTD
             </span>
@@ -2286,12 +2299,16 @@ export default function RaimondSolarLandingPage() {
           {/* Column 1: Brand Block */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img 
-                src="https://assets.zyrosite.com/pdf53TOKTfqD9wIN/logo-raimond-symbol-Nzgl40wncJgQVrtY.jpg"
-                alt="Raimond Solar Logo"
-                className="h-10 sm:h-12 w-auto rounded object-contain shrink-0"
-                referrerPolicy="no-referrer"
-              />
+              <div className="relative h-10 sm:h-12 w-16 shrink-0">
+                <Image 
+                  src="https://assets.zyrosite.com/pdf53TOKTfqD9wIN/logo-raimond-symbol-Nzgl40wncJgQVrtY.jpg"
+                  alt="Raimond Solar Logo"
+                  fill
+                  sizes="64px"
+                  className="rounded object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
               <div className="flex flex-col">
                 <span className="text-2xl font-black tracking-tight text-white font-display leading-none">
                   RAIMOND SOLAR
@@ -2349,7 +2366,13 @@ export default function RaimondSolarLandingPage() {
               <li><strong className="text-slate-200">ISO 9001:2015:</strong> Certificate No: 305023122208Q</li>
               <li><strong className="text-slate-200">Office Hours:</strong> Mon–Sat: 10:00 AM – 7:00 PM | Sun: Closed</li>
               <li><strong className="text-slate-200">Reg. Office:</strong> Susangini Apt, 2nd Fl, 267, A.P. Nagar, Sonarpur, Kolkata – 700150</li>
-              <li><strong className="text-slate-200">Official Email:</strong> <a href="mailto:raimondsolar83@gmail.com" className="hover:text-amber-500 transition-colors select-auto" onContextMenu={(e) => e.stopPropagation()}>raimondsolar83@gmail.com</a></li>
+              <li className="flex items-center gap-2 flex-wrap">
+                <strong className="text-slate-200">Official Email:</strong> 
+                <a href="mailto:raimondsolar83@gmail.com" className="hover:text-amber-500 transition-colors select-auto" onContextMenu={(e) => e.stopPropagation()}>raimondsolar83@gmail.com</a>
+                <button onClick={() => handleCopy("raimondsolar83@gmail.com")} className="p-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors" title="Copy Email">
+                  {copiedItem === "raimondsolar83@gmail.com" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -2360,17 +2383,29 @@ export default function RaimondSolarLandingPage() {
               Get in Touch
             </h4>
             <ul className="space-y-4 text-[15px] text-slate-300 font-semibold leading-relaxed mb-8">
-              <li>
+              <li className="flex items-center gap-2 flex-wrap">
                 Helpline Primary: <a href="tel:9073059780" className="text-white relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-amber-500 font-mono font-black hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">9073059780</a>
+                <button onClick={() => handleCopy("9073059780")} className="p-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors ml-1" title="Copy Phone Number">
+                  {copiedItem === "9073059780" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
               </li>
-              <li>
+              <li className="flex items-center gap-2 flex-wrap">
                 Helpline Office: <a href="tel:6289638649" className="text-white relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-amber-500 font-mono font-black hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">6289638649</a>
+                <button onClick={() => handleCopy("6289638649")} className="p-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors ml-1" title="Copy Phone Number">
+                  {copiedItem === "6289638649" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
               </li>
-              <li>
+              <li className="flex items-center gap-2 flex-wrap">
                 WhatsApp Chat: <a href="https://wa.me/919073059780" className="text-[#25D366] relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-[#25D366] after:transition-all after:duration-300 hover:after:w-full hover:text-[#25D366] font-mono font-bold hover:drop-shadow-[0_0_8px_rgba(37,211,102,0.5)] transition-colors">9073059780</a>
+                <button onClick={() => handleCopy("9073059780")} className="p-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors ml-1" title="Copy Phone Number">
+                  {copiedItem === "9073059780" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
               </li>
-              <li>
+              <li className="flex items-center gap-2 flex-wrap">
                 Email Desk: <a href="mailto:raimondsolar83@gmail.com" className="text-slate-300 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-amber-500 after:transition-all after:duration-300 hover:after:w-full hover:text-white transition-colors hover:drop-shadow-[0_0_8px_rgba(245,130,31,0.5)]">raimondsolar83@gmail.com</a>
+                <button onClick={() => handleCopy("raimondsolar83@gmail.com")} className="p-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors ml-1" title="Copy Email">
+                  {copiedItem === "raimondsolar83@gmail.com" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
               </li>
             </ul>
 
