@@ -425,6 +425,7 @@ export default function RaimondSolarLandingPage() {
   }, []);
 
   const [copiedItem, setCopiedItem] = useState<string | null>(null);
+  const [loadedVideos, setLoadedVideos] = useState<Record<string, boolean>>({});
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -900,7 +901,7 @@ export default function RaimondSolarLandingPage() {
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-amber-100 p-0 m-0 font-sans">
 
       {/* Google Tag Manager (Script) */}
-      <Script id="gtm-script" strategy="afterInteractive">
+      <Script id="gtm-script" strategy="lazyOnload">
         {`
           (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -1933,15 +1934,35 @@ export default function RaimondSolarLandingPage() {
               className="bg-white border border-slate-200 rounded-3xl overflow-hidden p-4 relative flex flex-col justify-between hover:border-amber-400 hover:shadow-lg transition-all shadow-sm"
               id={`video-card-${vid.id}`}
             >
-              {/* YouTube Iframe element */}
-              <div className="relative aspect-[9/16] w-full max-h-[440px] bg-black rounded-2xl overflow-hidden shadow-inner">
-                <iframe
-                  src={`https://www.youtube.com/embed/${vid.id}`}
-                  title={vid.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full object-cover"
-                />
+              <div 
+                className="relative aspect-[9/16] w-full max-h-[440px] bg-black rounded-2xl overflow-hidden shadow-inner cursor-pointer group"
+                onClick={() => setLoadedVideos(prev => ({ ...prev, [vid.id]: true }))}
+              >
+                {!loadedVideos[vid.id] ? (
+                  <>
+                    <Image
+                      src={`https://img.youtube.com/vi/${vid.id}/hqdefault.jpg`}
+                      alt={vid.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300 opacity-90"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg group-hover:bg-red-700 transition-colors">
+                        <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${vid.id}?autoplay=1`}
+                    title={vid.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
               <div className="pt-4 text-left">
                 <div className="text-[10px] text-amber-600 font-extrabold tracking-wider uppercase font-display mb-1 font-sans">Raimond Solar Guide</div>
